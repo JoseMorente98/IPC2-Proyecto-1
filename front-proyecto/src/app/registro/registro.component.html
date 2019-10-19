@@ -1,1 +1,133 @@
-<p>registro works!</p>
+<div class="peers ai-s fxw-nw h-100vh">
+  <div class="peer peer-greed h-100 pos-r bgr-n bgpX-c bgpY-c bgsz-cv fondo-pagina">
+  </div>
+  <div class="col-12 col-md-4 peer pX-40 pY-80 h-100 bgc-white scrollable pos-r" style='min-width: 320px;'>
+    <h4 class="fw-300 c-grey-900 mB-40">Registro</h4>
+    <form [formGroup]="formData" (ngSubmit)="saveChanges()">
+      <div class="form-group">
+        <label class="text-normal text-dark">Nombre</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-info-alt"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre" name="nombre" required>
+        </div>     
+        <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="nombre.errors.required">
+              El nombre es requerido
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="nombre.errors.maxlength">
+              La longitud maxima es de 100 caracteres
+            </div>
+        </div>  
+      </div>
+      <div class="form-group">
+        <label class="text-normal text-dark">Apellido</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-info-alt"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" placeholder="Apellido" formControlName="apellido" name="apellido" required>
+        </div>
+        <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="apellido.errors.required">
+              El apellido es requerido
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="apellido.errors.maxlength">
+              La longitud maxima es de 100 caracteres
+            </div>
+        </div> 
+      </div>
+      <div class="form-group">
+        <label class="text-normal text-dark">No. Carnet</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-info-alt"></i>
+              </span>
+            </div>
+          </div>
+          <input type="number" class="form-control" placeholder="No. Carnet" formControlName="carnet" name="carnet" required maxlength="10">
+        </div>
+        <div *ngIf="carnet.invalid && (carnet.dirty || carnet.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="carnet.errors.required">
+              El carnet es requerido
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="carnet.errors.maxlength">
+              La longitud maxima es de 10 caracteres
+            </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="text-normal text-dark">Correo Electronico</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-lock"></i>
+              </span>
+            </div>
+          </div>
+          <input type="email" class="form-control" placeholder="Usuario" formControlName="email" name="email" required>
+        </div>
+        <div *ngIf="email.invalid && (email.dirty || email.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="email.errors.required">
+              El email es requerido
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="email.errors.maxlength">
+              La longitud maxima es de 100 caracteres
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="email.errors.email">
+              No es un correo valido
+            </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="text-normal text-dark">Contraseña</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-lock"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" placeholder="Contraseña" formControlName="password" name="password" required>
+        </div>
+        <div *ngIf="password.invalid && (password.dirty || password.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="password.errors.required">
+              La contraseña es requerida
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="password.errors.maxlength">
+              La longitud maxima es de 16 caracteres
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="password.errors.minlength">
+              La longitud minima es de 8 caracteres
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="password.errors.pattern">
+              No valido
+            </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" type="submit" [disabled]="!formData.valid">Registrarme</button>
+      </div>
+      <div class="form-group m-t-30 m-b-0">
+        <div class="col-sm-12 text-center">
+          <p>¿Ya tienes una cuenta? <a [routerLink]="[ '/login' ]" class="text-primary m-l-5"><b>Iniciar Sesión</b></a></p>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>

@@ -1,0 +1,164 @@
+<!-- ### $App Screen Content ### -->
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="jumbotron">
+        <h1 class="display-4">Usuarios</h1>
+        <div class="form-group form-inline my-2 my-lg-0">
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-search"></i>
+                  </span>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Usuario</th>
+                    <th>Tipo de Usuario</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of table |filter:search">
+                    <td>{{data.idUsuario}}</td>
+                    <td>{{data.nombre}}</td>
+                    <td>{{data.apellido}}</td>
+                    <td>{{data.username}}</td>
+                    <td>{{data.tipousuario}}</td>
+                    <td style="text-align: center">
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-outline-success" data-toggle="modal" [disabled]="data.idTipoUsuario==1"
+                      data-target="#exampleModalUpdate" (click)="getSingle(data.idUsuario)">
+                        <span class="icon-holder">
+                          <i class="ti-pencil"></i>
+                        </span>  Editar
+                      </button>
+                      <button type="button" class="btn btn-outline-danger" (click)="delete(data.idUsuario)" [disabled]="data.idTipoUsuario==1">
+                        <span class="icon-holder">
+                          <i class="ti-trash"></i>
+                        </span>  Eliminar
+                      </button>
+                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalUpdateLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" (ngSubmit)="saveChanges()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalUpdateLabel">Editar Usuario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" role="alert" *ngIf="notificacionError.estado">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          <strong>{{ notificacionError.mensaje }}</strong>
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Usuario</label>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-info-alt"></i>
+                  </span>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Usuario" #username="ngModel" [(ngModel)]="data.username" name="username" disabled>
+            </div>
+        </div> 
+        <div class="form-group">
+          <label class="text-normal text-dark">Nombre</label>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-info-alt"></i>
+                  </span>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Nombre" #nombre="ngModel" [(ngModel)]="data.nombre" name="nombre" required>
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="nombre.touched && !nombre.valid">
+              El nombre es requerido
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="text-normal text-dark">Apellido</label>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-info-alt"></i>
+                  </span>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Dirección" #apellido="ngModel" [(ngModel)]="data.apellido" name="apellido" required>
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="apellido.touched && !apellido.valid">
+              El apellido es requerido
+            </div>
+          </div> 
+          <div class="form-group">
+            <label class="text-normal text-dark">Tipo de Usuario</label>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-info-alt"></i>
+                  </span>
+                </div>
+              </div>
+              <select class="form-control" id="inlineFormInputGroup" placeholder="Tipo de Usuario" #idTipoUsuario="ngModel" [(ngModel)]="data.idTipoUsuario" name="idTipoUsuario">
+                <option value="2">Asistente</option>
+                <option value="3">Cliente</option>
+              </select>
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="idTipoUsuario.touched && !idTipoUsuario.valid">
+              El tipo es requerido
+            </div>
+          </div>                
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>

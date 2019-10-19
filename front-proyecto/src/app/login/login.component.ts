@@ -49,25 +49,33 @@ export class LoginComponent implements OnInit {
     console.log(this.formData.value)
     this.authService.auth(this.formData.value)
     .subscribe((res) => {
-      console.log(res)
-      console.log(res[0])
-      switch(res[0].idTipoUsuario) {
-        case 1:
-          
-          break;
-        case 2:
-          if(res.length > 1) {
-            //DASHBOARD COMPARTIDO
-          } else {
-            //AUX
-          }
-          break;
-        case 3:
-          
-          break;
+      if(res.length > 0) {
+        localStorage.setItem("currentNombre", res[0].nombre);         
+        localStorage.setItem("currentApellido", res[0].apellido);         
+
+        switch(res[0].idTipoUsuario) {
+          case 1:
+            this.router.navigate(['admin']);
+            localStorage.setItem("currentTypeName", res[0].tipo);         
+            break;
+          case 2:
+            if(res.length > 1) {
+              //DASHBOARD COMPARTIDO
+            } else {
+              //AUX
+              this.router.navigate(['auxiliar']);          
+            }
+            break;
+          case 3:
+            this.router.navigate(['estudiante']);          
+            break;
+        }
+      } else {
+        this.notificationsService.error('Error D:', 'El correo o contraseña son incorrectos.');
       }
     }, (err) => {
-      console.log(err)
+      this.notificationsService.error('Error D:', 'El correo o contraseña son incorrectos.');
+      console.log(err);
     });
   }
 

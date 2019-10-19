@@ -4,12 +4,6 @@
   <div class="col-12 col-md-4 peer pX-40 pY-80 h-100 bgc-white scrollable pos-r" style='min-width: 320px;'>
         <h4 class="fw-300 c-grey-900 mB-40">Inicio de Sesión</h4>
         <form [formGroup]="formData" (ngSubmit)="logIn()">
-          <div class="alert alert-danger" role="alert" *ngIf="notificacionError.estado">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              <strong>{{ notificacionError.mensaje }}</strong>
-          </div>
           <div class="form-group">
             <label class="text-normal text-dark">Usuario</label>
             <div class="input-group mb-2">

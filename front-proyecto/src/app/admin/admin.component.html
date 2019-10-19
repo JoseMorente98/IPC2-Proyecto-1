@@ -41,6 +41,25 @@
                 <span class="title">Usuarios</span>
               </a>
             </li>
+            <li class="nav-item dropdown">
+              <a class="dropdown-toggle" href="javascript:void(0);"data-toggle="dropdown">
+                <span class="icon-holder">
+                  <i class="c-orange-500 ti-layout-list-thumb"></i>
+                </span>
+                <span class="title">Usuarios</span>
+                <span class="arrow">
+                  <i class="ti-angle-right"></i>
+                </span>
+              </a>
+              <ul class="dropdown-menu fsz-sm">
+                <li >
+                  <a  class="d-b td-n pY-5 bgcH-grey-100 c-grey-700 sidebar-link"  [routerLink]="['usuario']">Basic Table</a>
+                </li>
+                <li>
+                  <a class='sidebar-link' [routerLink]="['usuario']">Data Table</a>
+                </li>
+              </ul>
+            </li>
             <li class="nav-item">
               <a class='sidebar-link' [routerLink]="['proveedor']" routerLinkActive="active">
                 <span class="icon-holder">
