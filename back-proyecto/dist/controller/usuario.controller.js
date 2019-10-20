@@ -7,14 +7,43 @@ var mysql_1 = __importDefault(require("./../mysql/mysql"));
 var UsuarioController = /** @class */ (function () {
     function UsuarioController() {
         this.getAll = function (req, res) {
-            var query = "\n            SELECT * FROM Usuario\n        ";
+            var query = "\n            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email \n            FROM Usuario\n        ";
             mysql_1.default.getQuery(query, function (err, data) {
                 if (err) {
-                    res.status(400).json({
-                        ok: false,
-                        status: 400,
-                        error: err
-                    });
+                    res.json([]);
+                }
+                else {
+                    res.json(data);
+                }
+            });
+        };
+        this.getAllAdmin = function (req, res) {
+            var query = "\n            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email,\n            TipoUsuario.nombre as 'tipo'\n            FROM DetalleUsuario\n            INNER JOIN Usuario ON DetalleUsuario.idUsuario = Usuario.idUsuario\n            INNER JOIN TipoUsuario ON DetalleUsuario.idTipoUsuario = TipoUsuario.idTipoUsuario\n            WHERE TipoUsuario.idTipoUsuario = 1;\n        ";
+            mysql_1.default.getQuery(query, function (err, data) {
+                if (err) {
+                    res.json([]);
+                }
+                else {
+                    res.json(data);
+                }
+            });
+        };
+        this.getAllAuxiliar = function (req, res) {
+            var query = "\n            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email,\n            TipoUsuario.nombre as 'tipo'\n            FROM DetalleUsuario\n            INNER JOIN Usuario ON DetalleUsuario.idUsuario = Usuario.idUsuario\n            INNER JOIN TipoUsuario ON DetalleUsuario.idTipoUsuario = TipoUsuario.idTipoUsuario\n            WHERE TipoUsuario.idTipoUsuario = 2;\n        ";
+            mysql_1.default.getQuery(query, function (err, data) {
+                if (err) {
+                    res.json([]);
+                }
+                else {
+                    res.json(data);
+                }
+            });
+        };
+        this.getAllEstudiante = function (req, res) {
+            var query = "\n            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email,\n            TipoUsuario.nombre as 'tipo'\n            FROM DetalleUsuario\n            INNER JOIN Usuario ON DetalleUsuario.idUsuario = Usuario.idUsuario\n            INNER JOIN TipoUsuario ON DetalleUsuario.idTipoUsuario = TipoUsuario.idTipoUsuario\n            WHERE TipoUsuario.idTipoUsuario = 3;\n        ";
+            mysql_1.default.getQuery(query, function (err, data) {
+                if (err) {
+                    res.json([]);
                 }
                 else {
                     res.json(data);
@@ -22,7 +51,7 @@ var UsuarioController = /** @class */ (function () {
             });
         };
         this.getSingle = function (req, res) {
-            var query = "\n            CALL SP_GetUsuario(?);\n        ";
+            var query = "\n            SELECT *\n            FROM Usuario WHERE idUsuario = ?;\n        ";
             var body = {
                 idUsuario: req.params.id
             };

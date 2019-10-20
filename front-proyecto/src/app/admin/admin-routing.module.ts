@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '', component: AdminComponent, children: [
     { path: 'dashboard', component: DashboardAdminComponent},
-    { path: 'usuario', component: UsuarioAdminComponent},
+    { path: 'usuario/:type', component: UsuarioAdminComponent},
     /*{ path: 'producto', component: ProductoAdminComponent, canActivate: [AuthGuard] },
     { path: 'proveedor', component: ProveedorAdminComponent, canActivate: [AuthGuard] },
     { path: 'usuario', component: UsuarioAdminComponent, canActivate: [AuthGuard] },

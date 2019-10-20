@@ -37,6 +37,109 @@ CREATE TABLE DetalleUsuario(
 	ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+-- CREATE TABLE CURSE
+DROP TABLE IF EXISTS Curso;
+CREATE TABLE Curso(
+	idCurso INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(100) NULL,
+	codigo VARCHAR(50) NULL,
+	estado TINYINT NOT NULL
+);
+
+-- CREATE TABLE SECCION
+DROP TABLE IF EXISTS Seccion;
+CREATE TABLE Seccion(
+	idSeccion INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(10) NULL
+);
+
+-- CREATE TABLE DETAIL CURSE
+DROP TABLE IF EXISTS DetalleCurso;
+CREATE TABLE DetalleCurso(
+    idDetalleCurso INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    semestre VARCHAR(50) NULL,
+	anio VARCHAR(50) NULL,
+	horaInicio VARCHAR(50) NULL,
+	horaFin VARCHAR(50) NULL,
+    idCurso INT NOT NULL,
+    idSeccion INT NOT NULL,
+    FOREIGN KEY (idCurso) REFERENCES Curso(idCurso)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    FOREIGN KEY (idSeccion) REFERENCES Seccion(idSeccion)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREATE TABLE ASIGNAMENT AUXILIAR
+DROP TABLE IF EXISTS AsignacionAuxiliar;
+CREATE TABLE AsignacionAuxiliar(
+    idAsignacionAuxiliar INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT NOT NULL,
+    idDetalleCurso INT NOT NULL,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    FOREIGN KEY (idDetalleCurso) REFERENCES DetalleCurso(idDetalleCurso)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREATE TABLE MESSAGES
+DROP TABLE IF EXISTS Mensaje;
+CREATE TABLE Mensaje(
+    idMensaje INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idUsuario1 INT NOT NULL,
+    idUsuario2 INT NOT NULL,
+    asunto VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idUsuario1) REFERENCES Usuario(idUsuario)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    FOREIGN KEY (idUsuario2) REFERENCES Usuario(idUsuario)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREATE TABLE MESSAGES
+DROP TABLE IF EXISTS DetalleMensaje;
+CREATE TABLE DetalleMensaje(
+    idDetalleMensaje INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idMensaje INT NOT NULL,
+    cuerpo VARCHAR(255) NOT NULL,
+    archivo BLOB NULL,
+    FOREIGN KEY (idMensaje) REFERENCES Mensaje(idMensaje)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREATE TABLE FORO
+DROP TABLE IF EXISTS Foro;
+CREATE TABLE Foro(
+    idForo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    descripcion VARCHAR(255) NOT NULL,
+    fecha DATE NOT NULL,
+    hora DATETIME NOT NULL,
+	idAsignacionAuxiliar INT NOT NULL,
+	FOREIGN KEY (idAsignacionAuxiliar) REFERENCES AsignacionAuxiliar(idAsignacionAuxiliar)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREATE TABLE DETAIL FORO
+DROP TABLE IF EXISTS DetalleForo;
+CREATE TABLE DetalleForo(
+    idDetalleForo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    comentario VARCHAR(250) NOT NULL,
+	idUsuario INT NOT NULL,
+	idForo INT NOT NULL,
+	FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE,
+	FOREIGN KEY (idForo) REFERENCES Foro(idForo)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
 
 -- SP AGREGAR DETALLE USUARIO
 DELIMITER $$
@@ -91,5 +194,99 @@ BEGIN
 		VALUES (_carnet, _dpi, _email, _password, _nombre, _apellido);
 	SET _idUsuario = (SELECT idUsuario FROM Usuario ORDER BY idUsuario DESC LIMIT 1);
     CALL SP_AsignarRol(_rol, _idUsuario);
+END;
+$$
+
+-- SP VER CREAR USUARIO
+DELIMITER $$
+CREATE PROCEDURE SP_CreateDetalleCurso
+(IN _semestre VARCHAR(50), _anio VARCHAR(50), _horaInicio VARCHAR(50), _horaFin VARCHAR(50), _idCurso INT, _idSeccion INT)
+BEGIN
+	DECLARE _existe INT;
+	SET _existe = (SELECT COUNT(*) FROM DetalleCurso WHERE idCurso = _idCurso AND idSeccion = _idSeccion AND horaInicio = _horaInicio AND horaFin = _horaFin AND semestre = _semestre);
+	IF(_existe = 0) THEN
+	INSERT INTO DetalleCurso(semestre, anio, horaInicio, horaFin, idCurso, idSeccion) VALUES (_semestre, _anio, _horaInicio, _horaFin, _idCurso, _idSeccion);
+		SELECT _existe;
+	ELSE
+		SELECT _existe;
+	END IF;
+END;
+$$
+
+-- SP VER CREAR USUARIO
+DELIMITER $$
+CREATE PROCEDURE SP_UpdateDetalleCurso
+(IN _semestre VARCHAR(50), _anio VARCHAR(50), _horaInicio VARCHAR(50), _horaFin VARCHAR(50), _idCurso INT, _idSeccion INT, _idDetalleCurso INT)
+BEGIN
+	DECLARE _existe INT;
+	SET _existe = (SELECT COUNT(*) FROM DetalleCurso WHERE idCurso = _idCurso AND idSeccion = _idSeccion AND horaInicio = _horaInicio AND horaFin = _horaFin AND semestre = _semestre);
+	IF(_existe = 0) THEN
+		UPDATE DetalleCurso SET semestre = _semestre, anio = _anio, horaInicio = _horaInicio, horaFin = _horaFin,
+        idCurso = _idCurso, idSeccion = _idSeccion WHERE idDetalleCurso = _idDetalleCurso;
+		SELECT _existe;
+	ELSE
+		SELECT _existe;
+	END IF;
+END;
+$$
+
+-- SP VER CREAR USUARIO
+DELIMITER $$
+CREATE PROCEDURE SP_UpdateAsignacionAuxiliar
+(IN _idUsuario INT, _idDetalleCurso INT, _idAsignacionAuxiliar INT)
+BEGIN
+	DECLARE _existe INT;
+	SET _existe = (SELECT COUNT(*) FROM AsignacionAuxiliar WHERE idUsuario = _idUsuario AND idDetalleCurso = _idDetalleCurso);
+	IF(_existe = 0) THEN
+		UPDATE AsignacionAuxiliar SET idUsuario = _idUsuario, idDetalleCurso = _idDetalleCurso
+        WHERE idAsignacionAuxiliar = _idAsignacionAuxiliar;
+		SELECT _existe;
+	ELSE
+		SELECT _existe;
+	END IF;
+END;
+$$
+
+-- SP VER CREAR USUARIO
+DELIMITER $$
+CREATE PROCEDURE SP_CreateAsignacionAuxiliar
+(IN _idUsuario INT, _idDetalleCurso INT)
+BEGIN
+	DECLARE _existe INT;
+	SET _existe = (SELECT COUNT(*) FROM AsignacionAuxiliar WHERE idUsuario = _idUsuario AND idDetalleCurso = _idDetalleCurso);
+	IF(_existe = 0) THEN
+		INSERT INTO AsignacionAuxiliar(idUsuario, idDetalleCurso)
+			VALUES (_idUsuario, _idDetalleCurso);
+		SELECT _existe;
+	ELSE
+		SELECT _existe;
+	END IF;
+END;
+$$
+
+-- SP VER CREAR USUARIO
+DELIMITER $$
+CREATE PROCEDURE SP_CreateAsignacionAuxiliar
+(IN _idUsuario INT, _idDetalleCurso INT)
+BEGIN
+	DECLARE _existe INT;
+	SET _existe = (SELECT COUNT(*) FROM AsignacionAuxiliar WHERE idUsuario = _idUsuario AND idDetalleCurso = _idDetalleCurso);
+	IF(_existe = 0) THEN
+		INSERT INTO AsignacionAuxiliar(idUsuario, idDetalleCurso)
+			VALUES (_idUsuario, _idDetalleCurso);
+		SELECT _existe;
+	ELSE
+		SELECT _existe;
+	END IF;
+END;
+$$
+
+-- SP CREAR MENSAJE
+DELIMITER $$
+CREATE PROCEDURE SP_CreateMensaje
+(IN _idUsuario1 INT, _idUsuario2 INT, _asunto VARCHAR(255), _cuerpo VARCHAR(255), _archivo BLOB)
+BEGIN
+	INSERT INTO Mensaje(idUsuario1, idUsuario2, asunto) VALUES(_idUsuario1, _idUsuario2, _asunto);
+    INSERT INTO DetalleMensaje(idMensaje, cuerpo, archivo) VALUES((SELECT max(idMensaje) FROM Mensaje), _cuerpo, _archivo);
 END;
 $$

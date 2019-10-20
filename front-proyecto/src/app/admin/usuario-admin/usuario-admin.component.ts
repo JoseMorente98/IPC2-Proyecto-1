@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from 'src/app/_service/usuario.service';
 import { NotificationsService } from 'angular2-notifications';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 //JQUERY
 declare var $:any;
@@ -13,6 +14,7 @@ declare var $:any;
 })
 export class UsuarioAdminComponent implements OnInit {
   formData:FormGroup;
+  parameter:any;
   table:any[];
   data = {
     id: 0,
@@ -38,35 +40,35 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private usuarioService: UsuarioService,
     private notificationsService: NotificationsService
-  ) { }
+  ) {
+    this.initializeForm();
+  }
 
   ngOnInit() {
-    this.getAll();
+    this.parameter = this.activatedRoute.snapshot.paramMap.get('type');
+    this.getAllAdmin();
   }
 
   initializeForm() {
     this.formData = new FormGroup({
       'nombre': new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      'idTipoUsuario': new FormControl('3'),
       'apellido': new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      'carnet': new FormControl('', [Validators.required, Validators.maxLength(10)]),
       'email': new FormControl('', [Validators.required, Validators.maxLength(100), Validators.email]),
-      'password': new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16), , Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&]).{8,16}')])
+      'password': new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16), , Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&]).{8,16}')]),
+      'idTipoUsuario': new FormControl('1'),
+      'id': new FormControl(''),
     });
   }
 
   saveChanges() {
-    if(this.data.nombre) {
-      if(this.data.apellido) {
-        this.update(this.data);
-      } else {
-        this.notificationError("La direccion es requerida");        
-      }
-    } else {
-      this.notificationError("El nombre es requerido");
-    }
+    this.create(this.formData.value)
+  }
+
+  saveChanges2() {
+    this.update(this.formData.value)
   }
 
   public notificationError(msg:string) {
@@ -77,8 +79,8 @@ export class UsuarioAdminComponent implements OnInit {
     }, 1000);
   }
 
-  getAll() {
-    this.usuarioService.getAll()
+  getAllAdmin() {
+    this.usuarioService.getAllAdmin()
     .subscribe((res) => {
       this.table = [];
       console.log(res);
@@ -92,8 +94,12 @@ export class UsuarioAdminComponent implements OnInit {
     this.usuarioService.getSingle(id)
     .subscribe((res) => {
       console.log(res)
-      this.data = res;
-      this.data.id = res.idUsuario;
+      this.formData.get('nombre').setValue(res.nombre);
+      this.formData.get('apellido').setValue(res.apellido);
+      this.formData.get('email').setValue(res.email);
+      this.formData.get('password').setValue(res.password);
+      this.formData.get('id').setValue(res.idUsuario);
+      console.log(this.formData.value)
     }, (error) => {
       console.log(error);
     })
@@ -102,8 +108,24 @@ export class UsuarioAdminComponent implements OnInit {
   delete(id:any) {
     this.usuarioService.delete(id)
     .subscribe((res) => {
-      this.getAll();
+      this.getAllAdmin();
       this.notificationsService.success('Exito :D', 'Usuario eliminado con éxito.');
+    }, (error) => {
+      console.log(error);
+      this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
+    })
+  }
+
+  create(data:any) {
+    this.usuarioService.create(data)
+    .subscribe((res) => {
+      $('#exampleModalAdd').modal('hide');
+      this.notificationsService.success('Exito :D', 'Usuario agregado con éxito.');
+      this.getAllAdmin();
+      this.formData.get('nombre').setValue("");
+      this.formData.get('apellido').setValue("");
+      this.formData.get('email').setValue("");
+      this.formData.get('password').setValue("");
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -113,15 +135,23 @@ export class UsuarioAdminComponent implements OnInit {
   update(data:any) {
     this.usuarioService.update(data)
     .subscribe((res) => {
-      this.data.nombre = "";
-      this.data.apellido = "";
-      this.getAll();
-      this.notificationsService.success('Exito :D', 'Usuario actualizado con éxito.');
       $('#exampleModalUpdate').modal('hide');
+      this.notificationsService.success('Exito :D', 'Usuario actualizado con éxito.');
+      this.getAllAdmin();
+      this.formData.get('nombre').setValue("");
+      this.formData.get('apellido').setValue("");
+      this.formData.get('email').setValue("");
+      this.formData.get('password').setValue("");
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
     })
   }
+
+  get nombre() { return this.formData.get('nombre'); }
+  get apellido() { return this.formData.get('apellido'); }
+  get email() { return this.formData.get('email'); }
+  get password() { return this.formData.get('password'); }
+  get id() { return this.formData.get('id'); }
 
 }

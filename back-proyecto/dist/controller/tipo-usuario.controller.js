@@ -10,11 +10,7 @@ var TipoUsuarioController = /** @class */ (function () {
             var query = "\n            SELECT * FROM TipoUsuario\n        ";
             mysql_1.default.getQuery(query, function (err, data) {
                 if (err) {
-                    res.status(400).json({
-                        ok: false,
-                        status: 400,
-                        error: err
-                    });
+                    res.json([]);
                 }
                 else {
                     res.json(data);

@@ -39,6 +39,33 @@ export class UsuarioService {
     );
   }
 
+  //GET ALL
+  getAllAdmin() : Observable<any> {
+    let url = `${this.basePath}usuario/admin`;
+    return this.http.get(url)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  //GET ALL
+  getAllAux() : Observable<any> {
+    let url = `${this.basePath}usuario/auxiliar`;
+    return this.http.get(url)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  //GET ALL
+  getAllStudent() : Observable<any> {
+    let url = `${this.basePath}usuario/estudiante`;
+    return this.http.get(url)
+    .pipe(
+      catchError(this.handleError)
+    );
+  }
+
   //GET SINGLE
   getSingle(id:number) : Observable<any> {
     let url = `${this.basePath}usuario/${id}`;

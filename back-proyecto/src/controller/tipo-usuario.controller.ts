@@ -18,11 +18,7 @@ export default class TipoUsuarioController {
 
         MySQL.getQuery(query, (err:any, data:Object[]) => {
             if(err) {
-                res.status(400).json({
-                    ok: false,
-                    status: 400,
-                    error: err
-                });
+                res.json([]);
             } else {
                 res.json(data)
             }

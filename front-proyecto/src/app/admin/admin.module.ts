@@ -19,7 +19,8 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
     FormsModule,
     Ng2SearchPipeModule,
     SimpleNotificationsModule.forRoot(),
-    AdminRoutingModule
+    AdminRoutingModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }

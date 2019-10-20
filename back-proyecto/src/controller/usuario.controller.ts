@@ -13,25 +13,81 @@ export default class UsuarioController {
 
     getAll = (req: Request, res: Response) => {
         const query = `
-            SELECT * FROM Usuario
+            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email 
+            FROM Usuario
         `;
 
         MySQL.getQuery(query, (err:any, data:Object[]) => {
             if(err) {
-                res.status(400).json({
-                    ok: false,
-                    status: 400,
-                    error: err
-                });
+                res.json([]);
             } else {
                 res.json(data)
             }
         })
     }
 
+    getAllAdmin = (req: Request, res: Response) => {
+        const query = `
+            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email,
+            TipoUsuario.nombre as 'tipo'
+            FROM DetalleUsuario
+            INNER JOIN Usuario ON DetalleUsuario.idUsuario = Usuario.idUsuario
+            INNER JOIN TipoUsuario ON DetalleUsuario.idTipoUsuario = TipoUsuario.idTipoUsuario
+            WHERE TipoUsuario.idTipoUsuario = 1;
+        `;
+
+        MySQL.getQuery(query, (err:any, data:Object[]) => {
+            if(err) {
+                res.json([]);
+            } else {
+                res.json(data)
+            }
+        })
+    }
+
+    getAllAuxiliar = (req: Request, res: Response) => {
+        const query = `
+            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email,
+            TipoUsuario.nombre as 'tipo'
+            FROM DetalleUsuario
+            INNER JOIN Usuario ON DetalleUsuario.idUsuario = Usuario.idUsuario
+            INNER JOIN TipoUsuario ON DetalleUsuario.idTipoUsuario = TipoUsuario.idTipoUsuario
+            WHERE TipoUsuario.idTipoUsuario = 2;
+        `;
+
+        MySQL.getQuery(query, (err:any, data:Object[]) => {
+            if(err) {
+                res.json([]);
+            } else {
+                res.json(data)
+            }
+        })
+    }
+
+    getAllEstudiante = (req: Request, res: Response) => {
+        const query = `
+            SELECT Usuario.idUsuario, Usuario.carnet, Usuario.dpi, Usuario.nombre, Usuario.apellido, Usuario.email,
+            TipoUsuario.nombre as 'tipo'
+            FROM DetalleUsuario
+            INNER JOIN Usuario ON DetalleUsuario.idUsuario = Usuario.idUsuario
+            INNER JOIN TipoUsuario ON DetalleUsuario.idTipoUsuario = TipoUsuario.idTipoUsuario
+            WHERE TipoUsuario.idTipoUsuario = 3;
+        `;
+
+        MySQL.getQuery(query, (err:any, data:Object[]) => {
+            if(err) {
+                res.json([]);
+            } else {
+                res.json(data)
+            }
+        })
+    }
+
+
     getSingle = (req: Request, res: Response) => {
         const query = `
-            CALL SP_GetUsuario(?);
+            SELECT *
+            FROM Usuario WHERE idUsuario = ?;
         `;
 
         let body = {
