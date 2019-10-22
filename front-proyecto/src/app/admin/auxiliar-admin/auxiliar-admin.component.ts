@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UsuarioService } from 'src/app/_service/usuario.service';
 import { NotificationsService } from 'angular2-notifications';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 
 //JQUERY
 declare var $:any;
 
 @Component({
-  selector: 'app-usuario-admin',
-  templateUrl: './usuario-admin.component.html',
-  styleUrls: ['./usuario-admin.component.scss']
+  selector: 'app-auxiliar-admin',
+  templateUrl: './auxiliar-admin.component.html',
+  styleUrls: ['./auxiliar-admin.component.scss']
 })
-export class UsuarioAdminComponent implements OnInit {
+export class AuxiliarAdminComponent implements OnInit {
   formData:FormGroup;
   parameter:any;
   table:any[];
@@ -55,10 +55,12 @@ export class UsuarioAdminComponent implements OnInit {
   initializeForm() {
     this.formData = new FormGroup({
       'nombre': new FormControl('', [Validators.required, Validators.maxLength(100)]),
+      'dpi': new FormControl(null, [Validators.maxLength(13)]),
+      'carnet': new FormControl(null),
       'apellido': new FormControl('', [Validators.required, Validators.maxLength(100)]),
       'email': new FormControl('', [Validators.required, Validators.maxLength(100), Validators.email]),
       'password': new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
-      'idTipoUsuario': new FormControl('1'),
+      'idTipoUsuario': new FormControl('2'),
       'id': new FormControl(''),
     });
   }
@@ -80,7 +82,7 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   getAllAdmin() {
-    this.usuarioService.getAllAdmin()
+    this.usuarioService.getAllAux()
     .subscribe((res) => {
       this.table = [];
       console.log(res);
@@ -99,6 +101,8 @@ export class UsuarioAdminComponent implements OnInit {
       this.formData.get('email').setValue(res.email);
       this.formData.get('password').setValue(res.password);
       this.formData.get('id').setValue(res.idUsuario);
+      this.formData.get('dpi').setValue(res.dpi);
+      this.formData.get('carnet').setValue(res.carnet);
       console.log(this.formData.value)
     }, (error) => {
       console.log(error);
@@ -126,6 +130,8 @@ export class UsuarioAdminComponent implements OnInit {
       this.formData.get('apellido').setValue("");
       this.formData.get('email').setValue("");
       this.formData.get('password').setValue("");
+      this.formData.get('carnet').setValue("");
+      this.formData.get('dpi').setValue("");
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -142,6 +148,8 @@ export class UsuarioAdminComponent implements OnInit {
       this.formData.get('apellido').setValue("");
       this.formData.get('email').setValue("");
       this.formData.get('password').setValue("");
+      this.formData.get('carnet').setValue("");
+      this.formData.get('dpi').setValue("");
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -152,6 +160,8 @@ export class UsuarioAdminComponent implements OnInit {
   get apellido() { return this.formData.get('apellido'); }
   get email() { return this.formData.get('email'); }
   get password() { return this.formData.get('password'); }
+  get dpi() { return this.formData.get('dpi'); }
+  get carnet() { return this.formData.get('carnet'); }
   get id() { return this.formData.get('id'); }
 
 }

@@ -34,11 +34,11 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class='sidebar-link' [routerLink]="['usuario']" routerLinkActive="active">
+              <a class='sidebar-link' [routerLink]="['cursos']" routerLinkActive="active">
                 <span class="icon-holder">
-                  <i class="ti-user"></i>
+                  <i class="ti-ruler-pencil"></i>
                 </span>
-                <span class="title">Usuarios</span>
+                <span class="title">Mis Cursos</span>
               </a>
             </li>
             <li class="nav-item">
@@ -112,13 +112,13 @@
                       <i class="ti-user mR-10"></i>
                       <span>Profile</span>
                     </a>
-                  </li>
+                  </li>-->
                   <li>
-                    <a href="email.html" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
+                    <a [routerLink]="['mensaje']" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
                       <i class="ti-email mR-10"></i>
                       <span>Messages</span>
                     </a>
-                  </li>-->
+                  </li>
                   <li role="separator" class="divider"></li>
                   <li>
                     <a class="d-b td-n pY-5 bgcH-grey-100 c-grey-700" href="#" (click)="logOut()">

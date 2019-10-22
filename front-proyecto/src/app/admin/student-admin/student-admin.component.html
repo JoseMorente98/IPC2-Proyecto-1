@@ -3,7 +3,7 @@
   <div id='mainContent'>
     <div class="container-fluid">
       <div class="jumbotron">
-        <h1 class="display-4">Administradores</h1>
+        <h1 class="display-4">Estudiantes</h1>
         <div class="form-group form-inline my-2 my-lg-0">
             <div class="input-group mb-2">
               <div class="input-group-prepend">
@@ -33,6 +33,7 @@
                     <th>Apellido</th>
                     <th>Correo Electrónico</th>
                     <th>Tipo de Usuario</th>
+                    <th>No. Carnet</th>
                     <th>Opciones</th>
                   </tr>
                 </thead>
@@ -43,6 +44,7 @@
                     <td>{{data.apellido}}</td>
                     <td>{{data.email}}</td>
                     <td>{{data.tipo}}</td>
+                    <td>{{data.carnet}}</td>
                     <td style="text-align: center">
                       <div class="btn-group" role="group" aria-label="Basic example">
                       <button type="button" class="btn btn-outline-success" data-toggle="modal" [disabled]="data.idTipoUsuario==1"
@@ -122,6 +124,24 @@
           </div> 
         </div>
         <div class="form-group">
+          <label class="text-normal text-dark">No. Carnet</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="No. Carnet" formControlName="carnet" name="carnet" required>
+          </div>     
+          <div *ngIf="carnet.invalid && (carnet.dirty || carnet.touched)">
+              <div class="alert alert-warning" role="alert" *ngIf="carnet.errors.maxlength">
+                La longitud maxima es de 9 caracteres
+              </div>
+          </div>  
+        </div>
+        <div class="form-group">
           <label class="text-normal text-dark">Correo Electronico</label>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
@@ -191,7 +211,7 @@
   <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges2()">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalUpdateLabel">Editar Administrador</h5>
+        <h5 class="modal-title" id="exampleModalUpdateLabel">Agregar Administrador</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -238,6 +258,24 @@
                 La longitud maxima es de 100 caracteres
               </div>
           </div> 
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">No. Carnet</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="No. Carnet" formControlName="carnet" name="carnet" required>
+          </div>     
+          <div *ngIf="carnet.invalid && (carnet.dirty || carnet.touched)">
+              <div class="alert alert-warning" role="alert" *ngIf="carnet.errors.maxlength">
+                La longitud maxima es de 8 caracteres
+              </div>
+          </div>  
         </div>
         <div class="form-group">
           <label class="text-normal text-dark">Correo Electronico</label>
@@ -303,5 +341,4 @@
     </div>
   </form>
 </div>
-
 <simple-notifications [options]="options"></simple-notifications>

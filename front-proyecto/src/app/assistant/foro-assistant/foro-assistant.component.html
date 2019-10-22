@@ -1,0 +1,49 @@
+<main class='main-content bgc-grey-100'>
+  <!-- ================ start banner area ================= -->	
+  <div class="jumbotron">
+    <h1 class="display-4">Foros</h1>
+    <div class="form-group form-inline my-2 my-lg-0">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-search"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+        </div>
+    </div>
+    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalAdd">
+      <span class="icon-holder">
+        <i class="ti-plus"></i>
+      </span>  Agregar
+    </button>
+  </div>
+
+  <section class="section-margin calc-60px">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let data of table |filter:search">
+          <div class="card text-center card-product">
+            <div class="card-product__img">
+              <img class="card-img" src="https://www.redem.org/wp-content/uploads/2016/04/profesor-universitario.jpg" alt="">
+              <ul class="card-product__imgOverlay">
+                <!--<li><button><i class="ti-search"></i></button></li>
+                <li><button><i class="ti-shopping-cart"></i></button></li>-->
+                <li (click)="saveChanges(data)"><button type="button"><i class="ti-user"></i></button></li>
+                <li (click)="saveChanges(data)"><button type="button"><i class="ti-ruler-alt-2"></i></button></li>
+                <li [routerLink]="['/auxiliar/foro/'+data.idAsignacionAuxiliar]"><button type="button"><i class="ti-email"></i></button></li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <!--<p>Accessories</p>-->
+              <h4 class="card-product__title"><a href="single-product.html">{{data.codigo}} - {{data.curso}}</a></h4>
+              <p class="card-product__price">Sección {{data.seccion}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

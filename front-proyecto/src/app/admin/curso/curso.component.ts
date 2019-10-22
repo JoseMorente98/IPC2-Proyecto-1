@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from 'src/app/_service/usuario.service';
-import { NotificationsService } from 'angular2-notifications';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationsService } from 'angular2-notifications';
+import { CursoService } from 'src/app/_service/curso.service';
 
 //JQUERY
 declare var $:any;
 
 @Component({
-  selector: 'app-usuario-admin',
-  templateUrl: './usuario-admin.component.html',
-  styleUrls: ['./usuario-admin.component.scss']
+  selector: 'app-curso',
+  templateUrl: './curso.component.html',
+  styleUrls: ['./curso.component.scss']
 })
-export class UsuarioAdminComponent implements OnInit {
+export class CursoComponent implements OnInit {
   formData:FormGroup;
   parameter:any;
   table:any[];
   data = {
     id: 0,
     nombre: '',
-    apellido: '',
+    codigo: '',
     username: '',
     idTipoUsuario: ''
   }
@@ -41,7 +41,7 @@ export class UsuarioAdminComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private usuarioService: UsuarioService,
+    private cursoService: CursoService,
     private notificationsService: NotificationsService
   ) {
     this.initializeForm();
@@ -55,10 +55,8 @@ export class UsuarioAdminComponent implements OnInit {
   initializeForm() {
     this.formData = new FormGroup({
       'nombre': new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      'apellido': new FormControl('', [Validators.required, Validators.maxLength(100)]),
-      'email': new FormControl('', [Validators.required, Validators.maxLength(100), Validators.email]),
-      'password': new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]),
-      'idTipoUsuario': new FormControl('1'),
+      'codigo': new FormControl('', [Validators.required, Validators.maxLength(50)]),
+      'estado': new FormControl('', [Validators.required]),
       'id': new FormControl(''),
     });
   }
@@ -80,7 +78,7 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   getAllAdmin() {
-    this.usuarioService.getAllAdmin()
+    this.cursoService.getAll()
     .subscribe((res) => {
       this.table = [];
       console.log(res);
@@ -91,14 +89,13 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   getSingle(id:any) {
-    this.usuarioService.getSingle(id)
+    this.cursoService.getSingle(id)
     .subscribe((res) => {
       console.log(res)
       this.formData.get('nombre').setValue(res.nombre);
-      this.formData.get('apellido').setValue(res.apellido);
-      this.formData.get('email').setValue(res.email);
-      this.formData.get('password').setValue(res.password);
-      this.formData.get('id').setValue(res.idUsuario);
+      this.formData.get('codigo').setValue(res.codigo);
+      this.formData.get('estado').setValue(res.estado);
+      this.formData.get('id').setValue(res.idCurso);
       console.log(this.formData.value)
     }, (error) => {
       console.log(error);
@@ -106,10 +103,10 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   delete(id:any) {
-    this.usuarioService.delete(id)
+    this.cursoService.delete(id)
     .subscribe((res) => {
       this.getAllAdmin();
-      this.notificationsService.success('Exito :D', 'Usuario eliminado con éxito.');
+      this.notificationsService.success('Exito :D', 'Curso eliminado con éxito.');
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -117,15 +114,14 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   create(data:any) {
-    this.usuarioService.create(data)
+    this.cursoService.create(data)
     .subscribe((res) => {
       $('#exampleModalAdd').modal('hide');
-      this.notificationsService.success('Exito :D', 'Usuario agregado con éxito.');
+      this.notificationsService.success('Exito :D', 'Curso agregado con éxito.');
       this.getAllAdmin();
       this.formData.get('nombre').setValue("");
-      this.formData.get('apellido').setValue("");
-      this.formData.get('email').setValue("");
-      this.formData.get('password').setValue("");
+      this.formData.get('codigo').setValue("");
+      this.formData.get('estado').setValue("");
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -133,15 +129,14 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   update(data:any) {
-    this.usuarioService.update(data)
+    this.cursoService.update(data)
     .subscribe((res) => {
       $('#exampleModalUpdate').modal('hide');
-      this.notificationsService.success('Exito :D', 'Usuario actualizado con éxito.');
+      this.notificationsService.success('Exito :D', 'Curso actualizado con éxito.');
       this.getAllAdmin();
       this.formData.get('nombre').setValue("");
-      this.formData.get('apellido').setValue("");
-      this.formData.get('email').setValue("");
-      this.formData.get('password').setValue("");
+      this.formData.get('codigo').setValue("");
+      this.formData.get('estado').setValue("");
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -149,9 +144,8 @@ export class UsuarioAdminComponent implements OnInit {
   }
 
   get nombre() { return this.formData.get('nombre'); }
-  get apellido() { return this.formData.get('apellido'); }
-  get email() { return this.formData.get('email'); }
-  get password() { return this.formData.get('password'); }
+  get codigo() { return this.formData.get('codigo'); }
+  get estado() { return this.formData.get('estado'); }
   get id() { return this.formData.get('id'); }
 
 }

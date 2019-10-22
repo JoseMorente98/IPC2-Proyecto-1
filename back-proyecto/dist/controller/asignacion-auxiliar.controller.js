@@ -35,6 +35,42 @@ var AsignacionAuxiliarController = /** @class */ (function () {
                 }
             });
         };
+        this.getAuxiliar = function (req, res) {
+            var query = "\n            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, anio, horaInicio, DetalleCurso.idDetalleCurso\n            horaFin, Curso.nombre as 'curso', Curso.codigo, seccion.nombre as 'seccion' FROM AsignacionAuxiliar\n            INNER JOIN Usuario ON AsignacionAuxiliar.idUsuario = Usuario.idUsuario\n            INNER JOIN DetalleCurso ON AsignacionAuxiliar.idDetalleCurso = DetalleCurso.idDetalleCurso\n            INNER JOIN Curso on DetalleCurso.idCurso = Curso.idCurso\n            INNER JOIN Seccion on DetalleCurso.idSeccion = Seccion.idSeccion\n            WHERE DetalleCurso.idDetalleCurso = ?\n            ORDER BY idAsignacionAuxiliar;\n        ";
+            var body = {
+                idCurso: req.params.id
+            };
+            mysql_1.default.sendQuery(query, body.idCurso, function (err, data) {
+                if (err) {
+                    res.status(400).json({
+                        ok: false,
+                        status: 400,
+                        error: err
+                    });
+                }
+                else {
+                    res.json(data);
+                }
+            });
+        };
+        this.getCursosByAuxiliar = function (req, res) {
+            var query = "\n            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, anio, horaInicio, DetalleCurso.idDetalleCurso\n            horaFin, Curso.nombre as 'curso', Curso.codigo, seccion.nombre as 'seccion' FROM AsignacionAuxiliar\n            INNER JOIN Usuario ON AsignacionAuxiliar.idUsuario = Usuario.idUsuario\n            INNER JOIN DetalleCurso ON AsignacionAuxiliar.idDetalleCurso = DetalleCurso.idDetalleCurso\n            INNER JOIN Curso on DetalleCurso.idCurso = Curso.idCurso\n            INNER JOIN Seccion on DetalleCurso.idSeccion = Seccion.idSeccion\n            WHERE Usuario.idUsuario = ?\n            ORDER BY idAsignacionAuxiliar;\n        ";
+            var body = {
+                idCurso: req.params.id
+            };
+            mysql_1.default.sendQuery(query, body.idCurso, function (err, data) {
+                if (err) {
+                    res.status(400).json({
+                        ok: false,
+                        status: 400,
+                        error: err
+                    });
+                }
+                else {
+                    res.json(data);
+                }
+            });
+        };
         this.create = function (req, res) {
             var query = "\n            CALL SP_CreateAsignacionAuxiliar(?, ?);\n        ";
             var body = {
@@ -53,14 +89,15 @@ var AsignacionAuxiliarController = /** @class */ (function () {
                     if (JSON.parse(JSON.stringify(data[0]))[0]._existe == 0) {
                         res.json({
                             ok: true,
-                            status: 200
+                            status: 200,
+                            res: data[0]
                         });
                     }
                     else {
-                        res.status(400).json({
-                            ok: false,
-                            status: 400,
-                            error: "Ya existe un registro"
+                        res.json({
+                            ok: true,
+                            status: 200,
+                            res: data[0]
                         });
                     }
                 }

@@ -7,12 +7,20 @@ import { UsuarioAdminComponent } from './usuario-admin/usuario-admin.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { AuxiliarAdminComponent } from './auxiliar-admin/auxiliar-admin.component';
+import { StudentAdminComponent } from './student-admin/student-admin.component';
+import { CursoComponent } from './curso/curso.component';
+import { AsignacionCursoAdminComponent } from './asignacion-curso-admin/asignacion-curso-admin.component';
 
 @NgModule({
   declarations: [
     AdminComponent, 
     DashboardAdminComponent,
-    UsuarioAdminComponent
+    UsuarioAdminComponent,
+    AuxiliarAdminComponent,
+    StudentAdminComponent,
+    CursoComponent,
+    AsignacionCursoAdminComponent
   ],
   imports: [
     CommonModule,

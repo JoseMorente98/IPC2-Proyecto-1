@@ -14,5 +14,9 @@ export class AssistantComponent implements OnInit {
 
   ngOnInit() {
   }
+  
+  logOut() {
+    localStorage.clear();
+  }
 
 }

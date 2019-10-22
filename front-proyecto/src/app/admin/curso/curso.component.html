@@ -3,7 +3,7 @@
   <div id='mainContent'>
     <div class="container-fluid">
       <div class="jumbotron">
-        <h1 class="display-4">Administradores</h1>
+        <h1 class="display-4">Cursos</h1>
         <div class="form-group form-inline my-2 my-lg-0">
             <div class="input-group mb-2">
               <div class="input-group-prepend">
@@ -30,28 +30,27 @@
                   <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Correo Electrónico</th>
-                    <th>Tipo de Usuario</th>
+                    <th>Codigo</th>
+                    <th>Estado</th>
                     <th>Opciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of table |filter:search">
-                    <td>{{data.idUsuario}}</td>
+                    <td>{{data.idCurso}}</td>
                     <td>{{data.nombre}}</td>
-                    <td>{{data.apellido}}</td>
-                    <td>{{data.email}}</td>
-                    <td>{{data.tipo}}</td>
+                    <td>{{data.codigo}}</td>
+                    <td *ngIf="data.estado=='0'">Deshabilitado</td>
+                    <td *ngIf="data.estado=='1'">Habilitado</td>
                     <td style="text-align: center">
                       <div class="btn-group" role="group" aria-label="Basic example">
                       <button type="button" class="btn btn-outline-success" data-toggle="modal" [disabled]="data.idTipoUsuario==1"
-                      data-target="#exampleModalUpdate" (click)="getSingle(data.idUsuario)">
+                      data-target="#exampleModalUpdate" (click)="getSingle(data.idCurso)">
                         <span class="icon-holder">
                           <i class="ti-pencil"></i>
                         </span>  Editar
                       </button>
-                      <button type="button" class="btn btn-outline-danger" (click)="delete(data.idUsuario)" [disabled]="data.idTipoUsuario==1">
+                      <button type="button" class="btn btn-outline-danger" (click)="delete(data.idCurso)" [disabled]="data.idTipoUsuario==1">
                         <span class="icon-holder">
                           <i class="ti-trash"></i>
                         </span>  Eliminar
@@ -101,7 +100,7 @@
           </div>  
         </div>
         <div class="form-group">
-          <label class="text-normal text-dark">Apellido</label>
+          <label class="text-normal text-dark">Codigo</label>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">
@@ -110,65 +109,38 @@
                 </span>
               </div>
             </div>
-            <input type="text" class="form-control" placeholder="Apellido" formControlName="apellido" name="apellido" required>
+            <input type="text" class="form-control" placeholder="Codigo" formControlName="codigo" name="codigo" required>
           </div>
-          <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
-              <div class="alert alert-danger" role="alert" *ngIf="apellido.errors.required">
-                El apellido es requerido
+          <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="codigo.errors.required">
+                El codigo es requerido
               </div>
-              <div class="alert alert-warning" role="alert" *ngIf="apellido.errors.maxlength">
-                La longitud maxima es de 100 caracteres
+              <div class="alert alert-warning" role="alert" *ngIf="codigo.errors.maxlength">
+                La longitud maxima es de 50 caracteres
               </div>
           </div> 
         </div>
         <div class="form-group">
-          <label class="text-normal text-dark">Correo Electronico</label>
+          <label class="text-normal text-dark">Estado</label>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">
                 <span class="icon-holder">
-                  <i class="ti-lock"></i>
+                  <i class="ti-info-alt"></i>
                 </span>
               </div>
             </div>
-            <input type="email" class="form-control" placeholder="Usuario" formControlName="email" name="email" required>
-          </div>
-          <div *ngIf="email.invalid && (email.dirty || email.touched)">
-              <div class="alert alert-danger" role="alert" *ngIf="email.errors.required">
-                El email es requerido
+            <select class="form-control" id="inlineFormInputGroup" placeholder="Estado" formControlName="estado" name="estado" >
+              <option value="0">Deshabilitado</option>
+              <option value="1">Habilitado</option>
+            </select>
+          </div>     
+          <div *ngIf="estado.invalid && (estado.dirty || estado.touched)">
+              <div class="alert alert-warning" role="alert" *ngIf="estado.errors.maxlength">
+                La longitud maxima es de 9 caracteres
               </div>
-              <div class="alert alert-warning" role="alert" *ngIf="email.errors.maxlength">
-                La longitud maxima es de 100 caracteres
-              </div>
-              <div class="alert alert-warning" role="alert" *ngIf="email.errors.email">
-                No es un correo valido
-              </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="text-normal text-dark">Contraseña</label>
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <div class="input-group-text">
-                <span class="icon-holder">
-                  <i class="ti-lock"></i>
-                </span>
-              </div>
-            </div>
-            <input type="password" class="form-control" placeholder="Contraseña" formControlName="password" name="password" required>
-          </div>
-          <div *ngIf="password.invalid && (password.dirty || password.touched)">
-              <div class="alert alert-danger" role="alert" *ngIf="password.errors.required">
-                La contraseña es requerida
-              </div>
-              <div class="alert alert-warning" role="alert" *ngIf="password.errors.maxlength">
-                La longitud maxima es de 16 caracteres
-              </div>
-              <div class="alert alert-warning" role="alert" *ngIf="password.errors.minlength">
-                La longitud minima es de 8 caracteres
-              </div>
-          </div>
-        </div>              
+          </div>  
+        </div>           
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
@@ -191,7 +163,7 @@
   <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges2()">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalUpdateLabel">Editar Administrador</h5>
+        <h5 class="modal-title" id="exampleModalUpdateLabel">Agregar Administrador</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -219,7 +191,7 @@
           </div>  
         </div>
         <div class="form-group">
-          <label class="text-normal text-dark">Apellido</label>
+          <label class="text-normal text-dark">Codigo</label>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">
@@ -228,65 +200,38 @@
                 </span>
               </div>
             </div>
-            <input type="text" class="form-control" placeholder="Apellido" formControlName="apellido" name="apellido" required>
+            <input type="text" class="form-control" placeholder="Codigo" formControlName="codigo" name="codigo" required>
           </div>
-          <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
-              <div class="alert alert-danger" role="alert" *ngIf="apellido.errors.required">
-                El apellido es requerido
+          <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="codigo.errors.required">
+                El codigo es requerido
               </div>
-              <div class="alert alert-warning" role="alert" *ngIf="apellido.errors.maxlength">
+              <div class="alert alert-warning" role="alert" *ngIf="codigo.errors.maxlength">
                 La longitud maxima es de 100 caracteres
               </div>
           </div> 
         </div>
         <div class="form-group">
-          <label class="text-normal text-dark">Correo Electronico</label>
+          <label class="text-normal text-dark">Estado</label>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">
                 <span class="icon-holder">
-                  <i class="ti-lock"></i>
+                  <i class="ti-info-alt"></i>
                 </span>
               </div>
             </div>
-            <input type="email" class="form-control" placeholder="Usuario" formControlName="email" name="email" required>
-          </div>
-          <div *ngIf="email.invalid && (email.dirty || email.touched)">
-              <div class="alert alert-danger" role="alert" *ngIf="email.errors.required">
-                El email es requerido
+            <select class="form-control" id="inlineFormInputGroup" placeholder="Estado" formControlName="estado" name="estado" >
+              <option value="0">Deshabilitado</option>
+              <option value="1">Habilitado</option>
+            </select>
+          </div>     
+          <div *ngIf="estado.invalid && (estado.dirty || estado.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="estado.errors.required">
+                El estado es requerido
               </div>
-              <div class="alert alert-warning" role="alert" *ngIf="email.errors.maxlength">
-                La longitud maxima es de 100 caracteres
-              </div>
-              <div class="alert alert-warning" role="alert" *ngIf="email.errors.email">
-                No es un correo valido
-              </div>
-          </div>
+          </div>  
         </div>
-        <div class="form-group">
-          <label class="text-normal text-dark">Contraseña</label>
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <div class="input-group-text">
-                <span class="icon-holder">
-                  <i class="ti-lock"></i>
-                </span>
-              </div>
-            </div>
-            <input type="password" class="form-control" placeholder="Contraseña" formControlName="password" name="password" required>
-          </div>
-          <div *ngIf="password.invalid && (password.dirty || password.touched)">
-              <div class="alert alert-danger" role="alert" *ngIf="password.errors.required">
-                La contraseña es requerida
-              </div>
-              <div class="alert alert-warning" role="alert" *ngIf="password.errors.maxlength">
-                La longitud maxima es de 16 caracteres
-              </div>
-              <div class="alert alert-warning" role="alert" *ngIf="password.errors.minlength">
-                La longitud minima es de 8 caracteres
-              </div>
-          </div>
-        </div>              
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
@@ -303,5 +248,4 @@
     </div>
   </form>
 </div>
-
 <simple-notifications [options]="options"></simple-notifications>

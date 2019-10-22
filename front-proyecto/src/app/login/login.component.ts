@@ -50,6 +50,7 @@ export class LoginComponent implements OnInit {
     this.authService.auth(this.formData.value)
     .subscribe((res) => {
       if(res.length > 0) {
+        localStorage.setItem("currentId", res[0].idUsuario);      
         localStorage.setItem("currentNombre", res[0].nombre);         
         localStorage.setItem("currentApellido", res[0].apellido);         
 
@@ -63,7 +64,8 @@ export class LoginComponent implements OnInit {
               //DASHBOARD COMPARTIDO
             } else {
               //AUX
-              this.router.navigate(['auxiliar']);          
+              this.router.navigate(['auxiliar']);
+              localStorage.setItem("currentTypeName", res[0].tipo);
             }
             break;
           case 3:

@@ -16,4 +16,8 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
   }
 
+  logOut() {
+    localStorage.clear();
+  }
+
 }

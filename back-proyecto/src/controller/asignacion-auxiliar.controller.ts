@@ -53,6 +53,64 @@ export default class AsignacionAuxiliarController {
         })
     }
 
+    getAuxiliar = (req: Request, res: Response) => {
+        const query = `
+            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, anio, horaInicio, DetalleCurso.idDetalleCurso
+            horaFin, Curso.nombre as 'curso', Curso.codigo, seccion.nombre as 'seccion' FROM AsignacionAuxiliar
+            INNER JOIN Usuario ON AsignacionAuxiliar.idUsuario = Usuario.idUsuario
+            INNER JOIN DetalleCurso ON AsignacionAuxiliar.idDetalleCurso = DetalleCurso.idDetalleCurso
+            INNER JOIN Curso on DetalleCurso.idCurso = Curso.idCurso
+            INNER JOIN Seccion on DetalleCurso.idSeccion = Seccion.idSeccion
+            WHERE DetalleCurso.idDetalleCurso = ?
+            ORDER BY idAsignacionAuxiliar;
+        `;
+
+        let body = {
+            idCurso : req.params.id
+        }
+
+        MySQL.sendQuery(query, body.idCurso, (err:any, data:Object[]) => {
+            if(err) {
+                res.status(400).json({
+                    ok: false,
+                    status: 400,
+                    error: err
+                });
+            } else {
+                res.json(data)
+            }
+        })
+    }
+
+    getCursosByAuxiliar = (req: Request, res: Response) => {
+        const query = `
+            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, anio, horaInicio, DetalleCurso.idDetalleCurso
+            horaFin, Curso.nombre as 'curso', Curso.codigo, seccion.nombre as 'seccion' FROM AsignacionAuxiliar
+            INNER JOIN Usuario ON AsignacionAuxiliar.idUsuario = Usuario.idUsuario
+            INNER JOIN DetalleCurso ON AsignacionAuxiliar.idDetalleCurso = DetalleCurso.idDetalleCurso
+            INNER JOIN Curso on DetalleCurso.idCurso = Curso.idCurso
+            INNER JOIN Seccion on DetalleCurso.idSeccion = Seccion.idSeccion
+            WHERE Usuario.idUsuario = ?
+            ORDER BY idAsignacionAuxiliar;
+        `;
+
+        let body = {
+            idCurso : req.params.id
+        }
+
+        MySQL.sendQuery(query, body.idCurso, (err:any, data:Object[]) => {
+            if(err) {
+                res.status(400).json({
+                    ok: false,
+                    status: 400,
+                    error: err
+                });
+            } else {
+                res.json(data)
+            }
+        })
+    }
+
     create = (req: Request, res: Response) => {
         const query = `
             CALL SP_CreateAsignacionAuxiliar(?, ?);
@@ -76,14 +134,15 @@ export default class AsignacionAuxiliarController {
                 if(JSON.parse(JSON.stringify(data[0]))[0]._existe == 0) {
                     res.json({
                         ok: true,
-                        status: 200
+                        status: 200,
+                        res: data[0]
                     })
                 } else {
-                    res.status(400).json({
-                        ok: false,
-                        status: 400,
-                        error: "Ya existe un registro"
-                    });
+                    res.json({
+                        ok: true,
+                        status: 200,
+                        res: data[0]
+                    })
                 }
             }
         })

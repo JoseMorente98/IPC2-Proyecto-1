@@ -8,6 +8,8 @@ var asignacion_auxiliar_controller_1 = __importDefault(require("./../controller/
 var asignacionAuxiliar = express_1.Router();
 asignacionAuxiliar.get('/asignacion-auxiliar', asignacion_auxiliar_controller_1.default.getInstance().getAll);
 asignacionAuxiliar.get('/asignacion-auxiliar/:id', asignacion_auxiliar_controller_1.default.getInstance().getSingle);
+asignacionAuxiliar.get('/asignacion-auxiliar/curso/:id', asignacion_auxiliar_controller_1.default.getInstance().getAuxiliar);
+asignacionAuxiliar.get('/asignacion-auxiliar/auxiliar/:id', asignacion_auxiliar_controller_1.default.getInstance().getCursosByAuxiliar);
 asignacionAuxiliar.post('/asignacion-auxiliar', asignacion_auxiliar_controller_1.default.getInstance().create);
 asignacionAuxiliar.put('/asignacion-auxiliar/:id', asignacion_auxiliar_controller_1.default.getInstance().update);
 asignacionAuxiliar.delete('/asignacion-auxiliar/:id', asignacion_auxiliar_controller_1.default.getInstance().delete);

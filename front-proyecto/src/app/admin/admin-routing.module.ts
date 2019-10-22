@@ -3,12 +3,20 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 import { AdminComponent } from './admin.component';
 import { UsuarioAdminComponent } from './usuario-admin/usuario-admin.component';
+import { AuxiliarAdminComponent } from './auxiliar-admin/auxiliar-admin.component';
+import { StudentAdminComponent } from './student-admin/student-admin.component';
+import { CursoComponent } from './curso/curso.component';
+import { AsignacionCursoAdminComponent } from './asignacion-curso-admin/asignacion-curso-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '', component: AdminComponent, children: [
     { path: 'dashboard', component: DashboardAdminComponent},
-    { path: 'usuario/:type', component: UsuarioAdminComponent},
+    { path: 'usuario', component: UsuarioAdminComponent},
+    { path: 'auxiliar', component: AuxiliarAdminComponent},
+    { path: 'estudiante', component: StudentAdminComponent},
+    { path: 'curso', component: CursoComponent},
+    { path: 'detalle-curso', component: AsignacionCursoAdminComponent},
     /*{ path: 'producto', component: ProductoAdminComponent, canActivate: [AuthGuard] },
     { path: 'proveedor', component: ProveedorAdminComponent, canActivate: [AuthGuard] },
     { path: 'usuario', component: UsuarioAdminComponent, canActivate: [AuthGuard] },
