@@ -49,7 +49,7 @@ export default class ForoController {
 
     getAllByAsignacionAuxiliar = (req: Request, res: Response) => {
         const query = `
-            SELECT * FROM Foro WHERE idForo = ?
+            SELECT * FROM Foro WHERE idAsignacionAuxiliar = ?
         `;
 
         let body = {
@@ -64,26 +64,25 @@ export default class ForoController {
                     error: err
                 });
             } else {
-                res.json(data[0])
+                res.json(data)
             }
         })
     }
 
     create = (req: Request, res: Response) => {
         const query = `
-            INSERT INTO Foro(titulo, descripcion, fecha, hora, idAsignacionAuxiliar) VALUES(?, ?, ?, ?, ?)
+            INSERT INTO Foro(titulo, descripcion, fechaFin, idAsignacionAuxiliar) VALUES(?, ?, ?, ?)
         `;
 
         let body = {
             titulo: req.body.titulo,
             descripcion: req.body.descripcion,
-            fecha: req.body.fecha,
-            hora: req.body.hora,
+            fechaFin: req.body.fechaFin,
             idAsignacionAuxiliar: req.body.idAsignacionAuxiliar,
         }
         
         MySQL.sendQuery(query, 
-            [body.titulo, body.descripcion, body.fecha, body.hora, body.idAsignacionAuxiliar], 
+            [body.titulo, body.descripcion, body.fechaFin, body.idAsignacionAuxiliar], 
             (err:any, data:Object[]) => {
             if(err) {
                 res.status(400).json({
@@ -100,23 +99,52 @@ export default class ForoController {
         })
     }
 
+    createHiloForo = (req: Request, res: Response) => {
+        const query = `
+            CALL SP_CreateHiloForo(?, ?, ?);
+        `;
+
+        let body = {
+            comentario: req.body.comentario,
+            idUsuario: req.body.idUsuario,
+            idForo: req.body.idForo,
+        }
+        
+        MySQL.sendQuery(query, 
+            [body.comentario, body.idUsuario, body.idForo], 
+            (err:any, data:Object[]) => {
+            if(err) {
+                res.status(400).json({
+                    ok: false,
+                    status: 400,
+                    error: err
+                });
+            } else {
+                res.json({
+                    ok: true,
+                    status: 200,
+                    data: data[0]
+                })
+            }
+        })
+    }
+
     update = (req: Request, res: Response) => {
         let body = {
             titulo: req.body.titulo,
             descripcion: req.body.descripcion,
-            fecha: req.body.fecha,
-            hora: req.body.hora,
+            fechaFin: req.body.fechaFin,
             idAsignacionAuxiliar: req.body.idAsignacionAuxiliar,
             idForo: req.params.id,
         }
     
         const query = `
-            UPDATE Foro SET titulo = ?, descripcion = ?, fecha = ?, hora = ?, idAsignacionAuxiliar = ?
+            UPDATE Foro SET titulo = ?, descripcion = ?, fechaFin = ?, idAsignacionAuxiliar = ?
             WHERE idForo = ?;
         `;
     
         MySQL.sendQuery(query, 
-            [body.titulo, body.descripcion, body.fecha, body.hora, body.idAsignacionAuxiliar, body.idForo],
+            [body.titulo, body.descripcion, body.fechaFin, body.idAsignacionAuxiliar, body.idForo],
             (err:any, data:Object[]) => {
             if(err) {
                 res.status(400).json({

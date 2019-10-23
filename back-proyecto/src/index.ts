@@ -8,6 +8,7 @@ import usuario from "./router/usuario.router";
 import curso from "./router/curso.router";
 import seccion from "./router/seccion.router";
 import mensaje from "./router/mensaje.router";
+import foro from "./router/foro.router";
 
 const server = Server.init(3000);
 const api:string = "/api/"
@@ -42,6 +43,7 @@ server.app.use(api, usuario);
 server.app.use(api, curso);
 server.app.use(api, seccion);
 server.app.use(api, mensaje);
+server.app.use(api, foro);
 server.app.use(api, cursoDetalle);
 server.app.use(api, asignacionAuxiliar);
 

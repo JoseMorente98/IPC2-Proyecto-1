@@ -118,8 +118,7 @@ CREATE TABLE Foro(
     idForo INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     descripcion VARCHAR(255) NOT NULL,
-    fecha DATE NOT NULL,
-    hora DATETIME NOT NULL,
+    fechaFin DATETIME NOT NULL,
 	idAsignacionAuxiliar INT NOT NULL,
 	FOREIGN KEY (idAsignacionAuxiliar) REFERENCES AsignacionAuxiliar(idAsignacionAuxiliar)
 	ON UPDATE CASCADE
@@ -288,5 +287,24 @@ CREATE PROCEDURE SP_CreateMensaje
 BEGIN
 	INSERT INTO Mensaje(idUsuario1, idUsuario2, asunto) VALUES(_idUsuario1, _idUsuario2, _asunto);
     INSERT INTO DetalleMensaje(idMensaje, cuerpo, archivo) VALUES((SELECT max(idMensaje) FROM Mensaje), _cuerpo, _archivo);
+END;
+$$
+
+--CREAR HILO FORO
+DELIMITER $$
+CREATE PROCEDURE SP_CreateHiloForo
+(IN _comentario VARCHAR(250), _idUsuario INT, _idForo INT)
+BEGIN
+	DECLARE _fechaFin DATETIME;
+    DECLARE _tiempo INT;
+	SET _fechaFin = (SELECT fechaFin FROM foro WHERE idForo = _idForo);
+	IF(_fechaFin > NOW()) THEN
+		INSERT INTO DetalleForo(comentario, idUsuario, idForo) VALUES (_comentario, _idUsuario, _idForo);
+		SET _tiempo = 0;
+		SELECT _tiempo;
+	ELSE
+		SET _tiempo = 1;
+		SELECT _tiempo;
+	END IF;
 END;
 $$

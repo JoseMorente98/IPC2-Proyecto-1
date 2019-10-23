@@ -86,20 +86,11 @@ var AsignacionAuxiliarController = /** @class */ (function () {
                     });
                 }
                 else {
-                    if (JSON.parse(JSON.stringify(data[0]))[0]._existe == 0) {
-                        res.json({
-                            ok: true,
-                            status: 200,
-                            res: data[0]
-                        });
-                    }
-                    else {
-                        res.json({
-                            ok: true,
-                            status: 200,
-                            res: data[0]
-                        });
-                    }
+                    res.json({
+                        ok: true,
+                        status: 200,
+                        res: data[0]
+                    });
                 }
             });
         };

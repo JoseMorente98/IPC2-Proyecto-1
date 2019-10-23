@@ -13,6 +13,7 @@ var usuario_router_1 = __importDefault(require("./router/usuario.router"));
 var curso_router_1 = __importDefault(require("./router/curso.router"));
 var seccion_router_1 = __importDefault(require("./router/seccion.router"));
 var mensaje_router_1 = __importDefault(require("./router/mensaje.router"));
+var foro_router_1 = __importDefault(require("./router/foro.router"));
 var server = server_1.default.init(3000);
 var api = "/api/";
 mysql_1.default.getInstance();
@@ -43,6 +44,7 @@ server.app.use(api, usuario_router_1.default);
 server.app.use(api, curso_router_1.default);
 server.app.use(api, seccion_router_1.default);
 server.app.use(api, mensaje_router_1.default);
+server.app.use(api, foro_router_1.default);
 server.app.use(api, curso_detalle_router_1.default);
 server.app.use(api, asignacion_auxiliar_router_1.default);
 server.start(function () {
