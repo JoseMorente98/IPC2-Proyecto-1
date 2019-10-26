@@ -12,6 +12,7 @@ import { StudentAdminComponent } from './student-admin/student-admin.component';
 import { CursoComponent } from './curso/curso.component';
 import { AsignacionCursoAdminComponent } from './asignacion-curso-admin/asignacion-curso-admin.component';
 import { DetailCursoAdminComponent } from './detail-curso-admin/detail-curso-admin.component';
+import { TicketAdminComponent } from './ticket-admin/ticket-admin.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { DetailCursoAdminComponent } from './detail-curso-admin/detail-curso-adm
     StudentAdminComponent,
     CursoComponent,
     AsignacionCursoAdminComponent,
-    DetailCursoAdminComponent
+    DetailCursoAdminComponent,
+    TicketAdminComponent
   ],
   imports: [
     CommonModule,

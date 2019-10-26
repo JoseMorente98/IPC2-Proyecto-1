@@ -1,0 +1,239 @@
+<!-- ### $App Screen Content ### -->
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="jumbotron">
+        <h1 class="display-4">Mis Tickets</h1>
+        <div class="form-group form-inline my-2 my-lg-0">
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-search"></i>
+                  </span>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalAdd">
+          <span class="icon-holder">
+            <i class="ti-plus"></i>
+          </span>  Agregar
+        </button>
+      </div>
+      <div class="row">
+        <div *ngFor="let data of table |filter:search" class="col-md-3">
+          <div class="card border-danger mb-3" style="max-width: 18rem;" *ngIf="data.estado==0">
+            <div class="card-header">Enviado</div>
+              <div class="card-body">
+                <h5 class="card-title">{{data.asunto}}</h5>
+                <p class="card-text">{{data.mensaje}}</p>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-outline-dark" data-toggle="modal" [disabled]="data.idTipoUsuario==1"
+                      data-target="#exampleModalUpdate" (click)="getSingle(data.idTicket)">
+                        <span class="icon-holder">
+                          <i class="ti-pencil"></i>
+                        </span>  Editar
+                      </button>
+                      <button type="button" class="btn btn-outline-dark" (click)="delete(data.idTicket)" [disabled]="data.idTipoUsuario==1">
+                        <span class="icon-holder">
+                          <i class="ti-trash"></i>
+                        </span>  Eliminar
+                  </button>
+                </div>
+            </div>
+          </div>
+          <div class="card border-primary mb-3" style="max-width: 18rem;" *ngIf="data.estado==1">
+            <div class="card-header">Recibido</div>
+              <div class="card-body">
+                <h5 class="card-title">{{data.asunto}}</h5>
+                <p class="card-text">{{data.mensaje}}</p>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-outline-dark" (click)="delete(data.idTicket)" [disabled]="data.idTipoUsuario==1">
+                        <span class="icon-holder">
+                          <i class="ti-trash"></i>
+                        </span>  Eliminar
+                  </button>
+                </div>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">{{data.respuesta}}</small>
+            </div>
+          </div>
+          <div class="card border-warning mb-3" style="max-width: 18rem;" *ngIf="data.estado==2">
+            <div class="card-header">En Proceso</div>
+              <div class="card-body">
+                <h5 class="card-title">{{data.asunto}}</h5>
+                <p class="card-text">{{data.mensaje}}</p>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-outline-dark" (click)="delete(data.idTicket)" [disabled]="data.idTipoUsuario==1">
+                        <span class="icon-holder">
+                          <i class="ti-trash"></i>
+                        </span>  Eliminar
+                  </button>
+                </div>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">{{data.respuesta}}</small>
+            </div>
+          </div>
+          <div class="card border-success mb-3" style="max-width: 18rem;" *ngIf="data.estado==3">
+            <div class="card-header">Finalizado</div>
+              <div class="card-body">
+                <h5 class="card-title">{{data.asunto}}</h5>
+                <p class="card-text">{{data.mensaje}}</p>
+            </div>
+            <div class="card-footer">
+            <small class="text-muted">{{data.respuesta}}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalAddLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalAddLabel">Agregar Administrador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Asunto</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Asunto" formControlName="asunto" name="asunto" required>
+          </div>     
+          <div *ngIf="asunto.invalid && (asunto.dirty || asunto.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="asunto.errors.required">
+                El asunto es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="asunto.errors.maxlength">
+                La longitud maxima es de 100 caracteres
+              </div>
+          </div>  
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Mensaje</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <textarea rows="3" type="text" class="form-control" placeholder="Mensaje" formControlName="mensaje" name="mensaje" required></textarea>
+          </div>     
+          <div *ngIf="mensaje.invalid && (mensaje.dirty || mensaje.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="mensaje.errors.required">
+                El mensaje es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="mensaje.errors.maxlength">
+                La longitud maxima es de 100 caracteres
+              </div>
+          </div>  
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalAddLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges2()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalAddLabel">Agregar Administrador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Asunto</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Asunto" formControlName="asunto" name="asunto" required>
+          </div>     
+          <div *ngIf="asunto.invalid && (asunto.dirty || asunto.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="asunto.errors.required">
+                El asunto es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="asunto.errors.maxlength">
+                La longitud maxima es de 100 caracteres
+              </div>
+          </div>  
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Mensaje</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <textarea rows="3" type="text" class="form-control" placeholder="Mensaje" formControlName="mensaje" name="mensaje" required></textarea>
+          </div>     
+          <div *ngIf="mensaje.invalid && (mensaje.dirty || mensaje.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="mensaje.errors.required">
+                El mensaje es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="mensaje.errors.maxlength">
+                La longitud maxima es de 100 caracteres
+              </div>
+          </div>  
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>

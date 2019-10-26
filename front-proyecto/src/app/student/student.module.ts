@@ -11,6 +11,7 @@ import { ForoDetailStudentComponent } from './foro-detail-student/foro-detail-st
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { SimpleNotificationsModule } from 'angular2-notifications';
+import { TicketStudentComponent } from './ticket-student/ticket-student.component';
 
 
 
@@ -22,7 +23,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
     MisCursosStudentComponent, 
     MensajeStudentComponent, 
     ForoStudentComponent, 
-    ForoDetailStudentComponent
+    ForoDetailStudentComponent, TicketStudentComponent
   ],
   imports: [
     CommonModule,

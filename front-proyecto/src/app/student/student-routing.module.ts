@@ -7,6 +7,7 @@ import { MensajeStudentComponent } from './mensaje-student/mensaje-student.compo
 import { ForoStudentComponent } from './foro-student/foro-student.component';
 import { ForoDetailStudentComponent } from './foro-detail-student/foro-detail-student.component';
 import { CursosStudentComponent } from './cursos-student/cursos-student.component';
+import { TicketStudentComponent } from './ticket-student/ticket-student.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
     { path: 'cursos', component: CursosStudentComponent},
     { path: 'mis-cursos', component: MisCursosStudentComponent},
     { path: 'mensaje', component: MensajeStudentComponent},
+    { path: 'ticket', component: TicketStudentComponent},
     { path: 'foro/:id', component: ForoStudentComponent},
     { path: 'foro/detail/:id', component: ForoDetailStudentComponent},
     /*{ path: 'producto', component: ProductoAdminComponent, canActivate: [AuthGuard] },

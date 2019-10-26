@@ -8,6 +8,7 @@ import { StudentAdminComponent } from './student-admin/student-admin.component';
 import { CursoComponent } from './curso/curso.component';
 import { AsignacionCursoAdminComponent } from './asignacion-curso-admin/asignacion-curso-admin.component';
 import { DetailCursoAdminComponent } from './detail-curso-admin/detail-curso-admin.component';
+import { TicketAdminComponent } from './ticket-admin/ticket-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -17,6 +18,7 @@ const routes: Routes = [
     { path: 'auxiliar', component: AuxiliarAdminComponent},
     { path: 'estudiante', component: StudentAdminComponent},
     { path: 'curso', component: CursoComponent},
+    { path: 'ticket', component: TicketAdminComponent},
     { path: 'detalle-curso', component: AsignacionCursoAdminComponent},
     { path: 'detalle-curso/auxiliar/:id', component: DetailCursoAdminComponent},
     /*{ path: 'producto', component: ProductoAdminComponent, canActivate: [AuthGuard] },
