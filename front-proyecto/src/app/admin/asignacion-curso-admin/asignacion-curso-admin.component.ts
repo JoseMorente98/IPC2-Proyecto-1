@@ -18,6 +18,7 @@ declare var $:any;
 })
 export class AsignacionCursoAdminComponent implements OnInit {
   formData:FormGroup;
+  formDataDelete:FormGroup;
   formAssignament:FormGroup;
   parameter:any;
   table:any[];
@@ -58,6 +59,7 @@ export class AsignacionCursoAdminComponent implements OnInit {
     private notificationsService: NotificationsService
   ) {
     this.initializeForm();
+    this.initializeFormDelete(0);
     this.initializeFormA(null);
   }
 
@@ -74,6 +76,7 @@ export class AsignacionCursoAdminComponent implements OnInit {
       'anio': new FormControl('', [Validators.required, Validators.maxLength(50)]),
       'horaInicio': new FormControl('', [Validators.required, Validators.maxLength(50)]),
       'horaFin': new FormControl('', [Validators.required, Validators.maxLength(50)]),
+      'fechaFin': new FormControl('', [Validators.required]),
       'idCurso': new FormControl('', [Validators.required]),
       'idSeccion': new FormControl('', [Validators.required]),
       'id': new FormControl(''),
@@ -168,10 +171,10 @@ export class AsignacionCursoAdminComponent implements OnInit {
       this.formData.get('anio').setValue(res.anio);
       this.formData.get('horaInicio').setValue(res.horaInicio);
       this.formData.get('horaFin').setValue(res.horaFin);
+      this.formData.get('fechaFin').setValue(new Date(res.fechaFin).toISOString().replace(/T/, ' ').replace(/\..+/, ''));
       this.formData.get('idCurso').setValue(res.idCurso);
       this.formData.get('idSeccion').setValue(res.idSeccion);
-      this.formData.get('id').setValue(res.idCurso);
-      console.log(this.formData.value)
+      this.formData.get('id').setValue(res.idDetalleCurso);
     }, (error) => {
       console.log(error);
     })
@@ -180,8 +183,13 @@ export class AsignacionCursoAdminComponent implements OnInit {
   delete(id:any) {
     this.cursoDetalleService.delete(id)
     .subscribe((res) => {
-      this.getAll();
-      this.notificationsService.success('Exito :D', 'Curso eliminado con éxito.');
+      console.log(res)
+      if(res.data[0]._existe==0) {
+        this.notificationsService.success('Exito :D', 'Curso eliminado con éxito.');
+        this.getAll();
+      } else {
+        this.notificationsService.info('Advertencia D:', 'No se puede eliminar el detalle ya que existen alumnos asignados.');
+      }
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -189,17 +197,17 @@ export class AsignacionCursoAdminComponent implements OnInit {
   }
 
   create(data:any) {
+    console.log(data)
     this.cursoDetalleService.create(data)
     .subscribe((res) => {
-      $('#exampleModalAdd').modal('hide');
-      this.notificationsService.success('Exito :D', 'Curso agregado con éxito.');
-      this.getAll();
-      this.formData.get('semestre').setValue("");
-      this.formData.get('anio').setValue("");
-      this.formData.get('horaInicio').setValue("");
-      this.formData.get('horaFin').setValue("");
-      this.formData.get('idCurso').setValue("");
-      this.formData.get('idSeccion').setValue("");
+      console.log(res.data[0]._existe)
+      if(res.data[0]._existe==0) {
+        $('#exampleModalAdd').modal('hide');
+        this.notificationsService.success('Exito :D', 'Detalle de Curso agregado con éxito.');
+        this.getAll();
+      } else {
+        this.notificationsService.info('Advertencia D:', 'Ya existe un curso con los mismos detalles en el semestre.');
+      }      
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -207,17 +215,13 @@ export class AsignacionCursoAdminComponent implements OnInit {
   }
 
   update(data:any) {
+    console.log(data)
     this.cursoDetalleService.update(data)
     .subscribe((res) => {
       $('#exampleModalUpdate').modal('hide');
       this.notificationsService.success('Exito :D', 'Curso actualizado con éxito.');
       this.getAll();
-      this.formData.get('semestre').setValue("");
-      this.formData.get('anio').setValue("");
-      this.formData.get('horaInicio').setValue("");
-      this.formData.get('horaFin').setValue("");
-      this.formData.get('idCurso').setValue("");
-      this.formData.get('idSeccion').setValue("");
+      this.initializeForm();
     }, (error) => {
       console.log(error);
       this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
@@ -256,11 +260,39 @@ export class AsignacionCursoAdminComponent implements OnInit {
   get anio() { return this.formData.get('anio'); }
   get horaInicio() { return this.formData.get('horaInicio'); }
   get horaFin() { return this.formData.get('horaFin'); }
+  get fechaFin() { return this.formData.get('fechaFin'); }
   get idCurso() { return this.formData.get('idCurso'); }
   get idSeccion() { return this.formData.get('idSeccion'); }
   get id() { return this.formData.get('id'); }
   get idUsuario() { return this.formAssignament.get('idUsuario'); }
   get idDetalleCurso() { return this.formAssignament.get('idDetalleCurso'); }
 
+  initializeFormDelete(id:number) {
+    this.formDataDelete = new FormGroup({
+      'descripcion': new FormControl('', [Validators.required, Validators.maxLength(250)]),
+      'estado': new FormControl(0),
+      'id': new FormControl(id),
+    });
+  }
+
+  saveChangesDelete() {
+    this.deleteAssignament(this.formDataDelete.value)
+  }
+
+  deleteAssignament(id:any) {
+    this.asignacionAuxiliarService.delete(id)
+    .subscribe((res) => {
+      //this.getAllAuxAssignamente(+this.idDetalleCurso.value);
+      $('#exampleModalDelete').modal('hide');
+      this.notificationsService.success('Exito :D', 'Asignacion eliminada con éxito.');
+      this.getAllAuxAssignamente(+this.idDetalleCurso.value);
+    }, (error) => {
+      console.log(error);
+      this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
+    })
+  }
+
+  get descripcion() { return this.formDataDelete.get('descripcion'); }
+  get estado() { return this.formDataDelete.get('estado'); }
 
 }

@@ -1,0 +1,27 @@
+<main class='main-content bgc-grey-100'>
+  <!-- ================ start banner area ================= -->	
+  <div class="jumbotron">
+    <h1 class="display-4">Comentarios</h1>
+    <div class="form-group form-inline my-2 my-lg-0">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-search"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+        </div>
+    </div>
+  </div>
+
+  <div class="card" *ngFor="let data of table |filter:search" style="margin: 5px;">
+    <div class="card-header">
+      {{data.nombre}} {{data.apellido}}
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{data.comentario}}</p>
+    </div>
+  </div>
+</main>

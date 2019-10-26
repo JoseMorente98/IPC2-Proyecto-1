@@ -61,6 +61,7 @@ CREATE TABLE DetalleCurso(
 	anio VARCHAR(50) NULL,
 	horaInicio VARCHAR(50) NULL,
 	horaFin VARCHAR(50) NULL,
+    fechaFin DATETIME NOT NULL,
     idCurso INT NOT NULL,
     idSeccion INT NOT NULL,
     FOREIGN KEY (idCurso) REFERENCES Curso(idCurso)
@@ -77,6 +78,8 @@ CREATE TABLE AsignacionAuxiliar(
     idAsignacionAuxiliar INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     idUsuario INT NOT NULL,
     idDetalleCurso INT NOT NULL,
+    descripcion VARCHAR(255) NULL,
+	estado TINYINT NULL,
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 	ON UPDATE CASCADE
     ON DELETE CASCADE,
@@ -119,8 +122,8 @@ CREATE TABLE Foro(
     titulo VARCHAR(255) NOT NULL,
     descripcion VARCHAR(255) NOT NULL,
     fechaFin DATETIME NOT NULL,
-	idAsignacionAuxiliar INT NOT NULL,
-	FOREIGN KEY (idAsignacionAuxiliar) REFERENCES AsignacionAuxiliar(idAsignacionAuxiliar)
+	idDetalleCurso INT NOT NULL,
+	FOREIGN KEY (idDetalleCurso) REFERENCES DetalleCurso(idDetalleCurso)
 	ON UPDATE CASCADE
     ON DELETE CASCADE
 );
@@ -136,6 +139,50 @@ CREATE TABLE DetalleForo(
 	ON UPDATE CASCADE
     ON DELETE CASCADE,
 	FOREIGN KEY (idForo) REFERENCES Foro(idForo)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREAR TABLA ASIGNACION ESTUDIANTE
+DROP TABLE IF EXISTS AsignacionEstudiante;
+CREATE TABLE AsignacionEstudiante(
+    idAsignacionEstudiante INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idDetalleCurso INT NOT NULL,
+	idUsuario INT NOT NULL,
+	FOREIGN KEY (idDetalleCurso) REFERENCES DetalleCurso(idDetalleCurso)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREATE TABLE DETAIL ACTIVIDAD
+DROP TABLE IF EXISTS Actividad;
+CREATE TABLE Actividad(
+    idActividad INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(250) NOT NULL,
+    fechaLimite DATETIME NOT NULL,
+    ponderacion INT NOT NULL,
+    estado TINYINT NULL,
+    idDetalleCurso INT NOT NULL,
+	FOREIGN KEY (idDetalleCurso) REFERENCES DetalleCurso(idDetalleCurso)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- LA TABLA LE ASIGNA LA ACIVIDAD A LOS ALUMNOS
+DROP TABLE IF EXISTS ActividadAlumno;
+CREATE TABLE ActividadAlumno(
+    idActividadAlumno INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idActividad INT NOT NULL,
+    idUsuario INT NOT NULL,
+    entregada INT NOT NULL,
+    archivo BLOB NULL,
+	FOREIGN KEY (idActividad) REFERENCES Actividad(idActividad)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE,
+	FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 	ON UPDATE CASCADE
     ON DELETE CASCADE
 );
@@ -196,15 +243,15 @@ BEGIN
 END;
 $$
 
--- SP VER CREAR USUARIO
+-- SP CREAR DETALLE DE CURSO
 DELIMITER $$
 CREATE PROCEDURE SP_CreateDetalleCurso
-(IN _semestre VARCHAR(50), _anio VARCHAR(50), _horaInicio VARCHAR(50), _horaFin VARCHAR(50), _idCurso INT, _idSeccion INT)
+(IN _semestre VARCHAR(50), _anio VARCHAR(50), _horaInicio VARCHAR(50), _horaFin VARCHAR(50), _fechaFin DATETIME, _idCurso INT, _idSeccion INT)
 BEGIN
 	DECLARE _existe INT;
-	SET _existe = (SELECT COUNT(*) FROM DetalleCurso WHERE idCurso = _idCurso AND idSeccion = _idSeccion AND horaInicio = _horaInicio AND horaFin = _horaFin AND semestre = _semestre);
+	SET _existe = (SELECT COUNT(*) FROM DetalleCurso WHERE idCurso = _idCurso AND idSeccion = _idSeccion AND anio = _anio AND semestre = _semestre);
 	IF(_existe = 0) THEN
-	INSERT INTO DetalleCurso(semestre, anio, horaInicio, horaFin, idCurso, idSeccion) VALUES (_semestre, _anio, _horaInicio, _horaFin, _idCurso, _idSeccion);
+	INSERT INTO DetalleCurso(semestre, anio, horaInicio, horaFin, fechaFin, idCurso, idSeccion) VALUES (_semestre, _anio, _horaInicio, _horaFin, _fechaFin, _idCurso, _idSeccion);
 		SELECT _existe;
 	ELSE
 		SELECT _existe;
@@ -215,12 +262,12 @@ $$
 -- SP VER CREAR USUARIO
 DELIMITER $$
 CREATE PROCEDURE SP_UpdateDetalleCurso
-(IN _semestre VARCHAR(50), _anio VARCHAR(50), _horaInicio VARCHAR(50), _horaFin VARCHAR(50), _idCurso INT, _idSeccion INT, _idDetalleCurso INT)
+(IN _semestre VARCHAR(50), _anio VARCHAR(50), _horaInicio VARCHAR(50), _horaFin VARCHAR(50), _fechaFin DATETIME, _idCurso INT, _idSeccion INT, _idDetalleCurso INT)
 BEGIN
 	DECLARE _existe INT;
 	SET _existe = (SELECT COUNT(*) FROM DetalleCurso WHERE idCurso = _idCurso AND idSeccion = _idSeccion AND horaInicio = _horaInicio AND horaFin = _horaFin AND semestre = _semestre);
 	IF(_existe = 0) THEN
-		UPDATE DetalleCurso SET semestre = _semestre, anio = _anio, horaInicio = _horaInicio, horaFin = _horaFin,
+		UPDATE DetalleCurso SET semestre = _semestre, anio = _anio, horaInicio = _horaInicio, horaFin = _horaFin, fechaFin = _fechaFin,
         idCurso = _idCurso, idSeccion = _idSeccion WHERE idDetalleCurso = _idDetalleCurso;
 		SELECT _existe;
 	ELSE
@@ -246,7 +293,7 @@ BEGIN
 END;
 $$
 
--- SP VER CREAR USUARIO
+-- SP VER CREAR ASIGNACION AUXILIAR
 DELIMITER $$
 CREATE PROCEDURE SP_CreateAsignacionAuxiliar
 (IN _idUsuario INT, _idDetalleCurso INT)
@@ -254,25 +301,8 @@ BEGIN
 	DECLARE _existe INT;
 	SET _existe = (SELECT COUNT(*) FROM AsignacionAuxiliar WHERE idUsuario = _idUsuario AND idDetalleCurso = _idDetalleCurso);
 	IF(_existe = 0) THEN
-		INSERT INTO AsignacionAuxiliar(idUsuario, idDetalleCurso)
-			VALUES (_idUsuario, _idDetalleCurso);
-		SELECT _existe;
-	ELSE
-		SELECT _existe;
-	END IF;
-END;
-$$
-
--- SP VER CREAR USUARIO
-DELIMITER $$
-CREATE PROCEDURE SP_CreateAsignacionAuxiliar
-(IN _idUsuario INT, _idDetalleCurso INT)
-BEGIN
-	DECLARE _existe INT;
-	SET _existe = (SELECT COUNT(*) FROM AsignacionAuxiliar WHERE idUsuario = _idUsuario AND idDetalleCurso = _idDetalleCurso);
-	IF(_existe = 0) THEN
-		INSERT INTO AsignacionAuxiliar(idUsuario, idDetalleCurso)
-			VALUES (_idUsuario, _idDetalleCurso);
+		INSERT INTO AsignacionAuxiliar(idUsuario, idDetalleCurso, estado)
+			VALUES (_idUsuario, _idDetalleCurso, 1);
 		SELECT _existe;
 	ELSE
 		SELECT _existe;
@@ -305,6 +335,76 @@ BEGIN
 	ELSE
 		SET _tiempo = 1;
 		SELECT _tiempo;
+	END IF;
+END;
+$$
+
+-- SP ELIMINAR DETALLE CURSO
+DELIMITER $$
+CREATE PROCEDURE SP_DeleteDetalleCurso
+(IN _idDetalleCurso INT)
+BEGIN
+	DECLARE _existe INT;
+    SET _existe = (SELECT COUNT(*) FROM AsignacionEstudiante WHERE idDetalleCurso = _idDetalleCurso);
+	IF(_existe = 0) THEN
+		DELETE FROM DetalleCurso WHERE idDetalleCurso = _idDetalleCurso;
+		SELECT _existe;
+	ELSE
+		SELECT _existe;
+	END IF;
+END;
+$$
+
+-- SP CREAR ASIGNACION DE ESTUDIANTE
+DELIMITER $$
+CREATE PROCEDURE SP_CreateAsignacionEstudiante
+(IN _idDetalleCurso INT, IN _idUsuario INT)
+BEGIN
+	DECLARE _existe INT;
+    DECLARE _anio INT;
+    DECLARE _fechaFin DATETIME;
+    DECLARE _semestre VARCHAR(255);
+    DECLARE _idCurso INT;
+    SET _anio = (SELECT anio FROM DetalleCurso WHERE idDetalleCurso = _idDetalleCurso);
+    SET _semestre = (SELECT semestre FROM DetalleCurso WHERE idDetalleCurso = _idDetalleCurso);
+    SET _idCurso = (SELECT idCurso FROM DetalleCurso WHERE idDetalleCurso = _idDetalleCurso);
+    SET _fechaFin = (SELECT fechaFin FROM DetalleCurso WHERE idDetalleCurso = _idDetalleCurso);
+    SET _existe = (SELECT COUNT(*) FROM AsignacionEstudiante
+    INNER JOIN DetalleCurso ON AsignacionEstudiante.idDetalleCurso = DetalleCurso.idDetalleCurso
+    INNER JOIN Curso on DetalleCurso.idCurso = Curso.idCurso
+    WHERE AsignacionEstudiante.idUsuario = _idUsuario AND anio = _anio AND semestre = _semestre
+    AND Curso.idCurso = _idCurso);
+	IF(_existe = 0) THEN
+		IF(_fechaFin > NOW()) THEN
+			INSERT INTO AsignacionEstudiante(idDetalleCurso, idUsuario) VALUES (_idDetalleCurso, _idUsuario);
+			SELECT _existe;
+		ELSE
+			SET _existe = 1;
+			SELECT _existe;
+		END IF;
+	ELSE
+		SET _existe = 2;
+		SELECT _existe;
+	END IF;
+END;
+$$
+
+
+-- SP ELIMINAR ASIGNACION DE ESTUDIANTE
+DELIMITER $$
+CREATE PROCEDURE SP_DeleteAsignacionEstudiante
+(IN _idDetalleCurso INT, IN _idAsignacionEstudiante INT)
+BEGIN
+	DECLARE _existe INT;
+    DECLARE _fechaFin DATETIME;
+    SET _fechaFin = (SELECT fechaFin FROM DetalleCurso WHERE idDetalleCurso = _idDetalleCurso);
+	IF(_fechaFin > NOW()) THEN
+		DELETE FROM AsignacionEstudiante WHERE idAsignacionEstudiante = _idAsignacionEstudiante;
+        SET _existe = 0;
+        SELECT _existe;
+	ELSE
+		SET _existe = 1;
+		SELECT _existe;
 	END IF;
 END;
 $$

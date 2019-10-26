@@ -1,0 +1,114 @@
+<!-- ### $App Screen Content ### -->
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="jumbotron">
+        <h1 class="display-4">Detalle de Cursos</h1>
+        <div class="form-group form-inline my-2 my-lg-0">
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-search"></i>
+                  </span>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Semestre</th>
+                    <th>Año</th>
+                    <th>Horario</th>
+                    <th>Curso</th>
+                    <th>Sección</th>
+                    <th>Descripción</th>
+                    <th>Opciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of table |filter:search">
+                    <td>{{data.idAsignacionAuxiliar}}</td>
+                    <td>{{data.semestre}}</td>
+                    <td>{{data.anio}}</td>
+                    <td>{{data.horaInicio}} - {{data.horaFin}}</td>
+                    <td>{{data.curso}}</td>
+                    <td>{{data.seccion}}</td>
+                    <td>{{data.descripcion}}</td>
+                    <td style="text-align: center">
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                      <button type="button" class="btn btn-outline-danger" (click)="initializeForm(data.idAsignacionAuxiliar)" [disabled]="data.estado==0"
+                      data-toggle="modal" data-target="#exampleModalDelete">
+                        <span class="icon-holder">
+                          <i class="ti-trash"></i>
+                        </span>  Eliminar
+                      </button>
+                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalDeleteLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalDeleteLabel">Agregar Administrador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Motivo de Desasignación</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Motivo" formControlName="descripcion" name="descripcion" required>
+          </div>
+          <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="descripcion.errors.required">
+                La descripcion es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="descripcion.errors.maxlength">
+                La longitud maxima es de 250 caracteres
+              </div>
+          </div> 
+        </div>           
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>

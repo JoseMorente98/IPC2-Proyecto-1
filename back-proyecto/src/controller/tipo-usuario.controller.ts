@@ -68,6 +68,7 @@ export default class TipoUsuarioController {
                 res.json({
                     ok: true,
                     status: 200,
+                    data: data[0]
                 })
             }
         })

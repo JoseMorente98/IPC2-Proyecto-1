@@ -40,14 +40,14 @@
                   <!--<li><button><i class="ti-search"></i></button></li>
                   <li><button><i class="ti-shopping-cart"></i></button></li>-->
                   <li (click)="saveChanges(data)"><button type="button"><i class="ti-user"></i></button></li>
-                  <li (click)="saveChanges(data)"><button type="button"><i class="ti-ruler-alt-2"></i></button></li>
-                  <li [routerLink]="['/auxiliar/foro/'+data.idAsignacionAuxiliar]"><button type="button"><i class="ti-email"></i></button></li>
+                  <li [routerLink]="['/auxiliar/actividad/'+data.idDetalleCurso]"><button type="button"><i class="ti-ruler-alt-2"></i></button></li>
+                  <li [routerLink]="['/auxiliar/foro/'+data.idDetalleCurso]"><button type="button"><i class="ti-email"></i></button></li>
                 </ul>
               </div>
               <div class="card-body">
                 <!--<p>Accessories</p>-->
-                <h4 class="card-product__title"><a href="single-product.html">{{data.codigo}} - {{data.curso}}</a></h4>
-                <p class="card-product__price">Sección {{data.seccion}}</p>
+                <h4 class="card-product__title"><a>{{data.codigo}} - {{data.curso}}</a></h4>
+                <p class="card-product__price">{{data.semestre}} - Sección {{data.seccion}}</p>
               </div>
             </div>
           </div>

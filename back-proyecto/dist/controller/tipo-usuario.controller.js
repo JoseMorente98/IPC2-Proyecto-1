@@ -51,6 +51,7 @@ var TipoUsuarioController = /** @class */ (function () {
                     res.json({
                         ok: true,
                         status: 200,
+                        data: data[0]
                     });
                 }
             });

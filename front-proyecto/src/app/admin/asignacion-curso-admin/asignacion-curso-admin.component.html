@@ -31,8 +31,8 @@
                     <th>ID</th>
                     <th>Semestre</th>
                     <th>Año</th>
-                    <th>Hora Inicio</th>
-                    <th>Hora Fin</th>
+                    <th>Horario</th>
+                    <th>Fecha Fin de Asignación</th>
                     <th>Curso</th>
                     <th>Sección</th>
                     <th>Opciones</th>
@@ -43,8 +43,8 @@
                     <td>{{data.idDetalleCurso}}</td>
                     <td>{{data.semestre}}</td>
                     <td>{{data.anio}}</td>
-                    <td>{{data.horaInicio}}</td>
-                    <td>{{data.horaFin}}</td>
+                    <td>{{data.horaInicio}} - {{data.horaFin}}</td>
+                    <td>{{data.fechaFin | date: 'short'}}</td>
                     <td>{{data.nombre}}</td>
                     <td>{{data.seccion}}</td>
                     <td style="text-align: center">
@@ -170,6 +170,24 @@
               </div>
           </div> 
         </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Fecha Fin Asignacion</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="datetime-local" class="form-control" placeholder="Fecha de Entrega" formControlName="fechaFin" name="fechaFin" required>
+          </div>     
+          <div *ngIf="fechaFin.invalid && (fechaFin.dirty || fechaFin.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="fechaFin.errors.required">
+              La fecha fin asignación es requerido
+            </div>
+          </div>  
+        </div> 
         <div class="form-group">
           <label class="text-normal text-dark">Curso</label>
           <div class="input-group mb-2">
@@ -310,6 +328,24 @@
           </div> 
         </div>
         <div class="form-group">
+          <label class="text-normal text-dark">Fecha Fin Asignacion</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="datetime-local" class="form-control" placeholder="Fecha de Entrega" formControlName="fechaFin" name="fechaFin" required>
+          </div>     
+          <div *ngIf="fechaFin.invalid && (fechaFin.dirty || fechaFin.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="fechaFin.errors.required">
+              La fecha fin asignación es requerido
+            </div>
+          </div>  
+        </div> 
+        <div class="form-group">
           <label class="text-normal text-dark">Curso</label>
           <div class="input-group mb-2">
             <div class="input-group-prepend">
@@ -401,6 +437,7 @@
               <tr>
                 <th>ID</th>
                 <th>Auxiliar</th>
+                <th>Descrpcion</th>
                 <th>Eliminar</th>
               </tr>
             </thead>
@@ -408,9 +445,10 @@
               <tr *ngFor="let data of asignacion; let i = index">
                 <td>{{i+1}}</td>
                 <td>{{data.nombre}} {{data.apellido}}</td>
+                <td>{{data.descripcion}}</td>
                 <td style="text-align: center">
                   <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-outline-danger" (click)="delete2(data.idAsignacionAuxiliar)">
+                  <button type="button" class="btn btn-outline-danger" (click)="initializeFormDelete(data.idAsignacionAuxiliar)" data-toggle="modal" data-target="#exampleModalDelete" [disabled]="data.estado==0">
                     <span class="icon-holder">
                       <i class="ti-trash"></i>
                     </span>  Eliminar
@@ -428,6 +466,56 @@
           </span>  Cerrar
         </button>
         <button type="submit" class="btn btn-outline-primary" [disabled]="!formAssignament.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalDeleteLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formDataDelete" (ngSubmit)="saveChangesDelete()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalDeleteLabel">Eliminar Asignación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Motivo de Desasignación</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Motivo" formControlName="descripcion" name="descripcion" required>
+          </div>
+          <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="descripcion.errors.required">
+                La descripcion es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="descripcion.errors.maxlength">
+                La longitud maxima es de 250 caracteres
+              </div>
+          </div> 
+        </div>           
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formDataDelete.valid">
           <span class="icon-holder">
             <i class="ti-save-alt"></i>
           </span>  Guardar Cambios

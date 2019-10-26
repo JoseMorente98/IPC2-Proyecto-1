@@ -49,7 +49,7 @@ export class CursoComponent implements OnInit {
 
   ngOnInit() {
     this.parameter = this.activatedRoute.snapshot.paramMap.get('type');
-    this.getAllAdmin();
+    this.getAll();
   }
 
   initializeForm() {
@@ -77,7 +77,7 @@ export class CursoComponent implements OnInit {
     }, 1000);
   }
 
-  getAllAdmin() {
+  getAll() {
     this.cursoService.getAll()
     .subscribe((res) => {
       this.table = [];
@@ -105,7 +105,7 @@ export class CursoComponent implements OnInit {
   delete(id:any) {
     this.cursoService.delete(id)
     .subscribe((res) => {
-      this.getAllAdmin();
+      this.getAll();
       this.notificationsService.success('Exito :D', 'Curso eliminado con éxito.');
     }, (error) => {
       console.log(error);
@@ -118,7 +118,7 @@ export class CursoComponent implements OnInit {
     .subscribe((res) => {
       $('#exampleModalAdd').modal('hide');
       this.notificationsService.success('Exito :D', 'Curso agregado con éxito.');
-      this.getAllAdmin();
+      this.getAll();
       this.formData.get('nombre').setValue("");
       this.formData.get('codigo').setValue("");
       this.formData.get('estado').setValue("");
@@ -133,7 +133,7 @@ export class CursoComponent implements OnInit {
     .subscribe((res) => {
       $('#exampleModalUpdate').modal('hide');
       this.notificationsService.success('Exito :D', 'Curso actualizado con éxito.');
-      this.getAllAdmin();
+      this.getAll();
       this.formData.get('nombre').setValue("");
       this.formData.get('codigo').setValue("");
       this.formData.get('estado').setValue("");

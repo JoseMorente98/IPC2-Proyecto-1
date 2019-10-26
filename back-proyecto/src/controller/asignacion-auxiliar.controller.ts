@@ -13,7 +13,7 @@ export default class AsignacionAuxiliarController {
 
     getAll = (req: Request, res: Response) => {
         const query = `
-            SELECT idAsignacionAuxiliar, Usuario.nombre, Usuario.apellido, semestre, anio, horaInicio, 
+            SELECT idAsignacionAuxiliar, Usuario.nombre, Usuario.apellido, semestre, DetalleCurso.anio, horaInicio, AsignacionAuxiliar.estado, AsignacionAuxiliar.descripcion,
             horaFin, Curso.nombre as 'curso', Curso.codigo, seccion.nombre as 'seccion' FROM AsignacionAuxiliar
             INNER JOIN Usuario ON AsignacionAuxiliar.idUsuario = Usuario.idUsuario
             INNER JOIN DetalleCurso ON AsignacionAuxiliar.idDetalleCurso = DetalleCurso.idDetalleCurso
@@ -55,7 +55,8 @@ export default class AsignacionAuxiliarController {
 
     getAuxiliar = (req: Request, res: Response) => {
         const query = `
-            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, anio, horaInicio, DetalleCurso.idDetalleCurso
+            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, DetalleCurso.anio,
+            AsignacionAuxiliar.estado, AsignacionAuxiliar.descripcion, horaInicio, DetalleCurso.idDetalleCurso
             horaFin, Curso.nombre as 'curso', Curso.codigo, seccion.nombre as 'seccion' FROM AsignacionAuxiliar
             INNER JOIN Usuario ON AsignacionAuxiliar.idUsuario = Usuario.idUsuario
             INNER JOIN DetalleCurso ON AsignacionAuxiliar.idDetalleCurso = DetalleCurso.idDetalleCurso
@@ -84,7 +85,8 @@ export default class AsignacionAuxiliarController {
 
     getCursosByAuxiliar = (req: Request, res: Response) => {
         const query = `
-            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, anio, horaInicio, DetalleCurso.idDetalleCurso
+            SELECT idAsignacionAuxiliar, Usuario.idUsuario, Usuario.nombre, Usuario.apellido, semestre, DetalleCurso.anio, 
+            AsignacionAuxiliar.estado, horaInicio,fechaFin, DetalleCurso.idDetalleCurso, AsignacionAuxiliar.descripcion,
             horaFin, Curso.nombre as 'curso', Curso.codigo, seccion.nombre as 'seccion' FROM AsignacionAuxiliar
             INNER JOIN Usuario ON AsignacionAuxiliar.idUsuario = Usuario.idUsuario
             INNER JOIN DetalleCurso ON AsignacionAuxiliar.idDetalleCurso = DetalleCurso.idDetalleCurso
@@ -177,14 +179,19 @@ export default class AsignacionAuxiliarController {
         })
     }
 
-    delete = (req: Request, res: Response) => {
-        const id = req.params.id;
+    deleteAsignacion = (req: Request, res: Response) => {
+        let body = {
+            descripcion: req.body.descripcion,
+            estado: req.body.estado,
+            idAsignacionAuxiliar: req.params.id,
+        }
 
         const query = `
-            DELETE FROM AsignacionAuxiliar WHERE idAsignacionAuxiliar = ?
+            UPDATE AsignacionAuxiliar SET descripcion = ?, estado = ?
+            WHERE idAsignacionAuxiliar = ?
         `;
 
-        MySQL.sendQuery(query, id, (err:any, data:Object[]) => {
+        MySQL.sendQuery(query, [body.descripcion, body.estado, body.idAsignacionAuxiliar], (err:any, data:Object[]) => {
             if(err) {
                 res.status(400).json({
                     ok: false,

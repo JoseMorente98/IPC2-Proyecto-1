@@ -1,0 +1,133 @@
+<main class='main-content bgc-grey-100'>
+  <!-- ================ start banner area ================= -->	
+  <div class="jumbotron">
+    <h1 class="display-4">Foros</h1>
+    <div class="form-group form-inline my-2 my-lg-0">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-search"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+        </div>
+    </div>
+  </div>
+
+  <section class="section-margin calc-60px">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let data of table |filter:search">
+          <div class="card text-center card-product">
+            <div class="card-product__img">
+              <img class="card-img" src="https://www.redem.org/wp-content/uploads/2016/04/profesor-universitario.jpg" alt="">
+              <ul class="card-product__imgOverlay">
+                <!--<li><button><i class="ti-search"></i></button></li>
+                <li><button><i class="ti-shopping-cart"></i></button></li>-->
+                <li [routerLink]="['/estudiante/foro/detail/'+data.idForo]"><button type="button"><i class="ti-comment"></i></button></li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <!--<p>Accessories</p>-->
+              <h4 class="card-product__title"><a href="single-product.html">{{data.titulo}}</a></h4>
+              <p class="card-product__price">{{data.descripcion}}</p>
+              <p class="card-product__price">{{data.fecha}} {{data.hora}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalAddLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalAddLabel">Agregar Administrador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Titulo</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Titulo" formControlName="titulo" name="titulo" required>
+          </div>     
+          <div *ngIf="titulo.invalid && (titulo.dirty || titulo.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="titulo.errors.required">
+                El titulo es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="titulo.errors.maxlength">
+                La longitud maxima es de 255 caracteres
+              </div>
+          </div>  
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Descripcion</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Descripcion" formControlName="descripcion" name="descripcion" required>
+          </div>
+          <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="descripcion.errors.required">
+                La descripcion es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="descripcion.errors.maxlength">
+                La longitud maxima es de 255 caracteres
+              </div>
+          </div> 
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Fecha de Entrega</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="datetime-local" class="form-control" placeholder="Fecha de Entrega" formControlName="fechaFin" name="fechaFin" required>
+          </div>     
+          <div *ngIf="fechaFin.invalid && (fechaFin.dirty || fechaFin.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="fechaFin.errors.required">
+              La fecha de entrega es requerido
+            </div>
+        </div>  
+        </div>           
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>

@@ -2,11 +2,21 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardStudentComponent } from './dashboard-student/dashboard-student.component';
 import { StudentComponent } from './student.component';
+import { MisCursosStudentComponent } from './mis-cursos-student/mis-cursos-student.component';
+import { MensajeStudentComponent } from './mensaje-student/mensaje-student.component';
+import { ForoStudentComponent } from './foro-student/foro-student.component';
+import { ForoDetailStudentComponent } from './foro-detail-student/foro-detail-student.component';
+import { CursosStudentComponent } from './cursos-student/cursos-student.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '', component: StudentComponent, children: [
     { path: 'dashboard', component: DashboardStudentComponent},
+    { path: 'cursos', component: CursosStudentComponent},
+    { path: 'mis-cursos', component: MisCursosStudentComponent},
+    { path: 'mensaje', component: MensajeStudentComponent},
+    { path: 'foro/:id', component: ForoStudentComponent},
+    { path: 'foro/detail/:id', component: ForoDetailStudentComponent},
     /*{ path: 'producto', component: ProductoAdminComponent, canActivate: [AuthGuard] },
     { path: 'proveedor', component: ProveedorAdminComponent, canActivate: [AuthGuard] },
     { path: 'usuario', component: UsuarioAdminComponent, canActivate: [AuthGuard] },

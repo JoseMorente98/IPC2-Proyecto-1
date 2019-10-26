@@ -14,7 +14,7 @@
           <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
         </div>
     </div>
-    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalAdd">
+    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalAdd" (click)="initializeForm()">
       <span class="icon-holder">
         <i class="ti-plus"></i>
       </span>  Agregar
@@ -31,15 +31,15 @@
               <ul class="card-product__imgOverlay">
                 <!--<li><button><i class="ti-search"></i></button></li>
                 <li><button><i class="ti-shopping-cart"></i></button></li>-->
-                <li (click)="saveChanges(data)"><button type="button"><i class="ti-user"></i></button></li>
-                <li (click)="saveChanges(data)"><button type="button"><i class="ti-ruler-alt-2"></i></button></li>
-                <li [routerLink]="['/auxiliar/foro/'+data.idAsignacionAuxiliar]"><button type="button"><i class="ti-email"></i></button></li>
+                <li (click)="delete(data.idForo)"><button type="button"><i class="ti-trash"></i></button></li>
+                <li [routerLink]="['/auxiliar/foro/detail/'+data.idForo]"><button type="button"><i class="ti-comment"></i></button></li>
               </ul>
             </div>
             <div class="card-body">
               <!--<p>Accessories</p>-->
-              <h4 class="card-product__title"><a href="single-product.html">{{data.codigo}} - {{data.curso}}</a></h4>
-              <p class="card-product__price">Sección {{data.seccion}}</p>
+              <h4 class="card-product__title"><a href="single-product.html">{{data.titulo}}</a></h4>
+              <p class="card-product__price">{{data.descripcion}}</p>
+              <p class="card-product__price">{{data.fecha}} {{data.hora}}</p>
             </div>
           </div>
         </div>
@@ -47,3 +47,93 @@
     </div>
   </section>
 </main>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalAddLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalAddLabel">Agregar Administrador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Titulo</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Titulo" formControlName="titulo" name="titulo" required>
+          </div>     
+          <div *ngIf="titulo.invalid && (titulo.dirty || titulo.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="titulo.errors.required">
+                El titulo es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="titulo.errors.maxlength">
+                La longitud maxima es de 255 caracteres
+              </div>
+          </div>  
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Descripcion</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Descripcion" formControlName="descripcion" name="descripcion" required>
+          </div>
+          <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="descripcion.errors.required">
+                La descripcion es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="descripcion.errors.maxlength">
+                La longitud maxima es de 255 caracteres
+              </div>
+          </div> 
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Fecha de Entrega</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="datetime-local" class="form-control" placeholder="Fecha de Entrega" formControlName="fechaFin" name="fechaFin" required>
+          </div>     
+          <div *ngIf="fechaFin.invalid && (fechaFin.dirty || fechaFin.touched)">
+            <div class="alert alert-danger" role="alert" *ngIf="fechaFin.errors.required">
+              La fecha de entrega es requerido
+            </div>
+        </div>  
+        </div>           
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>

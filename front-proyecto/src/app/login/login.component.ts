@@ -69,7 +69,8 @@ export class LoginComponent implements OnInit {
             }
             break;
           case 3:
-            this.router.navigate(['estudiante']);          
+            this.router.navigate(['estudiante']);
+            localStorage.setItem("currentTypeName", res[0].tipo);
             break;
         }
       } else {

@@ -59,6 +59,11 @@
                           <i class="ti-trash"></i>
                         </span>  Eliminar
                       </button>
+                      <button type="button" class="btn btn-outline-secondary" [routerLink]="['/admin/detalle-curso/auxiliar/'+data.idUsuario]" [disabled]="data.idTipoUsuario==1">
+                        <span class="icon-holder">
+                          <i class="ti-ruler"></i>
+                        </span>  Cursos
+                      </button>
                     </div>
                     </td>
                   </tr>

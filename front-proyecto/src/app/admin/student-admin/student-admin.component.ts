@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from 'src/app/_service/usuario.service';
 import { NotificationsService } from 'angular2-notifications';
 
@@ -41,6 +41,7 @@ export class StudentAdminComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private usuarioService: UsuarioService,
     private notificationsService: NotificationsService
   ) {
@@ -163,4 +164,23 @@ export class StudentAdminComponent implements OnInit {
   get carnet() { return this.formData.get('carnet'); }
   get id() { return this.formData.get('id'); }
 
+  createType(idUsuario:any) {
+    let data = {
+      idUsuario: idUsuario,
+      idTipoUsuario: 2
+    }
+    this.usuarioService.createType(data)
+    .subscribe((res) => {
+      console.log(res.data[0]._existe)
+      if(res.data[0]._existe==0) {
+        this.notificationsService.success('Exito :D', 'Auxiliar creado con éxito.');
+        this.router.navigate(['/admin/auxiliar']);
+      } else {
+        this.notificationsService.info('Advertencia D:', 'No puede asignar el mismo rol varias veces.');
+      }
+    }, (error) => {
+      console.log(error);
+      this.notificationsService.error('Error D:', 'Ha ocurrido un error intente más tarde.');
+    })
+  }
 }

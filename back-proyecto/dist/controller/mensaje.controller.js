@@ -50,7 +50,7 @@ var MensajeController = /** @class */ (function () {
             });
         };
         this.getMessages = function (req, res) {
-            var query = "\n        SELECT Mensaje.idUsuario1, Mensaje.idUsuario2, Mensaje.idMensaje, Mensaje.Asunto, DetalleMensaje.Cuerpo, DetalleMensaje.Archivo FROM DetalleMensaje\n        INNER JOIN Mensaje ON DetalleMensaje.idMensaje = Mensaje.idMensaje\n        WHERE idUsuario1 = ? AND idUsuario2 = ?\n        UNION \n        SELECT Mensaje.idUsuario1, Mensaje.idUsuario2, Mensaje.idMensaje, Mensaje.Asunto, DetalleMensaje.Cuerpo, DetalleMensaje.Archivo FROM DetalleMensaje\n        INNER JOIN Mensaje ON DetalleMensaje.idMensaje = Mensaje.idMensaje\n        WHERE idUsuario1 = ? AND idUsuario2 = ?\n        ORDER BY Mensaje.idMensaje;\n        ";
+            var query = "\n        SELECT Mensaje.idUsuario1, Mensaje.idUsuario2, Mensaje.idMensaje, Mensaje.Asunto, DetalleMensaje.Cuerpo, DetalleMensaje.Archivo FROM DetalleMensaje\n        INNER JOIN Mensaje ON DetalleMensaje.idMensaje = Mensaje.idMensaje\n        WHERE idUsuario1 = ? AND idUsuario2 = ?\n        UNION \n        SELECT Mensaje.idUsuario1, Mensaje.idUsuario2, Mensaje.idMensaje, Mensaje.Asunto, DetalleMensaje.Cuerpo, DetalleMensaje.Archivo FROM DetalleMensaje\n        INNER JOIN Mensaje ON DetalleMensaje.idMensaje = Mensaje.idMensaje\n        WHERE idUsuario1 = ? AND idUsuario2 = ?\n        ORDER BY idMensaje;\n        ";
             var body = {
                 idUsuario1: req.params.id,
                 idUsuario2: req.params.id2,

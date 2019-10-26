@@ -84,13 +84,13 @@ export class AsignacionAuxiliarService {
     )
   }
 
-  //DELETE
-  public delete(id:number) : Observable<any> {
-    let url = `${this.basePath}asignacion-auxiliar/${id}`;
-    return this.http.delete(url)
+  //CREATE
+  public delete(data:any) : Observable<any> {
+    let url = `${this.basePath}asignacion-auxiliar/delete/${data.id}`;
+    return this.http.put(url, data, this.httpOptions)
     .pipe(
       catchError(this.handleError)
-    );
+    )
   }
 
 }

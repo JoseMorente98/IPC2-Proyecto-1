@@ -85,6 +85,15 @@ export class UsuarioService {
   }
 
   //CREATE
+  public createType(data:any) : Observable<any> {
+    let url = `${this.basePath}tipo-usuario`;
+    return this.http.post(url, data, this.httpOptions)
+    .pipe(
+      catchError(this.handleError)
+    )
+  }
+
+  //CREATE
   public update(data:any) : Observable<any> {
     let url = `${this.basePath}usuario/${data.id}`;
     return this.http.put(url, data, this.httpOptions)

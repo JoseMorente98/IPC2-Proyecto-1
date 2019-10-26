@@ -58,6 +58,11 @@
                           <i class="ti-trash"></i>
                         </span>  Eliminar
                       </button>
+                      <button type="button" class="btn btn-outline-secondary" (click)="createType(data.idUsuario)" [disabled]="data.idTipoUsuario==1">
+                        <span class="icon-holder">
+                          <i class="ti-user"></i>
+                        </span>  Permisos Auxiliar
+                      </button>
                     </div>
                     </td>
                   </tr>

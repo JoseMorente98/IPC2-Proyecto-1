@@ -81,7 +81,7 @@ export default class MensajeController {
         SELECT Mensaje.idUsuario1, Mensaje.idUsuario2, Mensaje.idMensaje, Mensaje.Asunto, DetalleMensaje.Cuerpo, DetalleMensaje.Archivo FROM DetalleMensaje
         INNER JOIN Mensaje ON DetalleMensaje.idMensaje = Mensaje.idMensaje
         WHERE idUsuario1 = ? AND idUsuario2 = ?
-        ORDER BY Mensaje.idMensaje;
+        ORDER BY idMensaje;
         `;
 
         let body = {

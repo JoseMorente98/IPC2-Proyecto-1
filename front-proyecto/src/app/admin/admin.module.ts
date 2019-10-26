@@ -11,6 +11,7 @@ import { AuxiliarAdminComponent } from './auxiliar-admin/auxiliar-admin.componen
 import { StudentAdminComponent } from './student-admin/student-admin.component';
 import { CursoComponent } from './curso/curso.component';
 import { AsignacionCursoAdminComponent } from './asignacion-curso-admin/asignacion-curso-admin.component';
+import { DetailCursoAdminComponent } from './detail-curso-admin/detail-curso-admin.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AsignacionCursoAdminComponent } from './asignacion-curso-admin/asignaci
     AuxiliarAdminComponent,
     StudentAdminComponent,
     CursoComponent,
-    AsignacionCursoAdminComponent
+    AsignacionCursoAdminComponent,
+    DetailCursoAdminComponent
   ],
   imports: [
     CommonModule,

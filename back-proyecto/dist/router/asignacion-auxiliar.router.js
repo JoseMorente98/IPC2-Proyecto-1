@@ -12,5 +12,5 @@ asignacionAuxiliar.get('/asignacion-auxiliar/curso/:id', asignacion_auxiliar_con
 asignacionAuxiliar.get('/asignacion-auxiliar/auxiliar/:id', asignacion_auxiliar_controller_1.default.getInstance().getCursosByAuxiliar);
 asignacionAuxiliar.post('/asignacion-auxiliar', asignacion_auxiliar_controller_1.default.getInstance().create);
 asignacionAuxiliar.put('/asignacion-auxiliar/:id', asignacion_auxiliar_controller_1.default.getInstance().update);
-asignacionAuxiliar.delete('/asignacion-auxiliar/:id', asignacion_auxiliar_controller_1.default.getInstance().delete);
+asignacionAuxiliar.put('/asignacion-auxiliar/delete/:id', asignacion_auxiliar_controller_1.default.getInstance().deleteAsignacion);
 exports.default = asignacionAuxiliar;

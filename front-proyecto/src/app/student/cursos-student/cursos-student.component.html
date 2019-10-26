@@ -1,0 +1,60 @@
+<main class='main-content bgc-grey-100'>
+    <!--================ Hero banner start =================-->
+    <section class="hero-banner">
+      <div class="container">
+        <div class="row no-gutters align-items-center pt-60px">
+          <div class="col-5 d-none d-sm-block">
+            <div class="hero-banner__img">
+              <img class="img-fluid" style="background-color: black;" src="https://aulavirtual.usac.edu.gt/g/logo.png" alt="">
+            </div>
+          </div>
+          <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
+            <div class="hero-banner__content">
+              <h1>Cursos</h1>
+            </div>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">
+                  <span class="icon-holder">
+                    <i class="ti-search"></i>
+                  </span>
+                </div>
+              </div>
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================ Hero banner start =================-->
+
+<!-- ================ trending product section start ================= -->  
+    <section class="section-margin calc-60px">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let data of table |filter:search">
+            <div class="card text-center card-product">
+              <div class="card-product__img">
+                <img class="card-img" src="https://www.forocuenca.com/wp-content/uploads/2015/12/ImagenInicioClasesApoyo.jpg" alt="">
+                <ul class="card-product__imgOverlay">
+                  <!--<li><button><i class="ti-search"></i></button></li>
+                  <li><button><i class="ti-shopping-cart"></i></button></li>-->
+                  <li (click)="saveChanges(data.idDetalleCurso)"><button type="button" style="color: white;">Matricularme  <i class="ti-plus"></i></button></li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <!--<p>Accessories</p>-->
+                <h4 class="card-product__title"><a>{{data.codigo}} - {{data.nombre}}</a></h4>
+                <p class="card-product__price">Sección {{data.seccion}}</p>
+                <p class="card-product__price">Año {{data.anio}}</p>
+                <p class="card-product__price">{{data.semestre}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ================ trending product section end ================= -->
+</main>
+
+<simple-notifications [options]="options"></simple-notifications>

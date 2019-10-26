@@ -31,10 +31,10 @@ export default class ForoController {
         `;
 
         let body = {
-            idCurso : req.params.id
+            idForo : req.params.id
         }
 
-        MySQL.sendQuery(query, body.idCurso, (err:any, data:Object[]) => {
+        MySQL.sendQuery(query, body.idForo, (err:any, data:Object[]) => {
             if(err) {
                 res.status(400).json({
                     ok: false,
@@ -47,16 +47,41 @@ export default class ForoController {
         })
     }
 
-    getAllByAsignacionAuxiliar = (req: Request, res: Response) => {
+    getAllByDetalleCurso = (req: Request, res: Response) => {
         const query = `
-            SELECT * FROM Foro WHERE idAsignacionAuxiliar = ?
+        SELECT idForo, titulo, descripcion, date(fechaFin) as 'fecha', time(fechaFin) as 'hora',
+        idDetalleCurso FROM Foro WHERE idDetalleCurso = ?
         `;
 
         let body = {
-            idCurso : req.params.id
+            idDetalleCurso : req.params.id
         }
 
-        MySQL.sendQuery(query, body.idCurso, (err:any, data:Object[]) => {
+        MySQL.sendQuery(query, body.idDetalleCurso, (err:any, data:Object[]) => {
+            if(err) {
+                res.status(400).json({
+                    ok: false,
+                    status: 400,
+                    error: err
+                });
+            } else {
+                res.json(data)
+            }
+        })
+    }
+
+    getAllResponseByForo = (req: Request, res: Response) => {
+        const query = `
+            SELECT idDetalleForo, comentario, Usuario.idUsuario, idForo, Usuario.nombre, Usuario.apellido FROM DetalleForo
+            INNER JOIN Usuario ON DetalleForo.idUsuario = Usuario.idUsuario
+            WHERE idForo = ?
+        `;
+
+        let body = {
+            idForo : req.params.id
+        }
+
+        MySQL.sendQuery(query, body.idForo, (err:any, data:Object[]) => {
             if(err) {
                 res.status(400).json({
                     ok: false,
@@ -71,18 +96,18 @@ export default class ForoController {
 
     create = (req: Request, res: Response) => {
         const query = `
-            INSERT INTO Foro(titulo, descripcion, fechaFin, idAsignacionAuxiliar) VALUES(?, ?, ?, ?)
+            INSERT INTO Foro(titulo, descripcion, fechaFin, idDetalleCurso) VALUES(?, ?, ?, ?)
         `;
 
         let body = {
             titulo: req.body.titulo,
             descripcion: req.body.descripcion,
             fechaFin: req.body.fechaFin,
-            idAsignacionAuxiliar: req.body.idAsignacionAuxiliar,
+            idDetalleCurso: req.body.idDetalleCurso,
         }
         
         MySQL.sendQuery(query, 
-            [body.titulo, body.descripcion, body.fechaFin, body.idAsignacionAuxiliar], 
+            [body.titulo, body.descripcion, body.fechaFin, body.idDetalleCurso], 
             (err:any, data:Object[]) => {
             if(err) {
                 res.status(400).json({
@@ -134,17 +159,17 @@ export default class ForoController {
             titulo: req.body.titulo,
             descripcion: req.body.descripcion,
             fechaFin: req.body.fechaFin,
-            idAsignacionAuxiliar: req.body.idAsignacionAuxiliar,
+            idDetalleCurso: req.body.idDetalleCurso,
             idForo: req.params.id,
         }
     
         const query = `
-            UPDATE Foro SET titulo = ?, descripcion = ?, fechaFin = ?, idAsignacionAuxiliar = ?
+            UPDATE Foro SET titulo = ?, descripcion = ?, fechaFin = ?, idDetalleCurso = ?
             WHERE idForo = ?;
         `;
     
         MySQL.sendQuery(query, 
-            [body.titulo, body.descripcion, body.fechaFin, body.idAsignacionAuxiliar, body.idForo],
+            [body.titulo, body.descripcion, body.fechaFin, body.idDetalleCurso, body.idForo],
             (err:any, data:Object[]) => {
             if(err) {
                 res.status(400).json({

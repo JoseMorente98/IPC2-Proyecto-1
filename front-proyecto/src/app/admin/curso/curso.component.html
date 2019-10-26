@@ -200,7 +200,7 @@
                 </span>
               </div>
             </div>
-            <input type="text" class="form-control" placeholder="Codigo" formControlName="codigo" name="codigo" required>
+            <input type="text" class="form-control" placeholder="Codigo" formControlName="codigo" name="codigo" disabled>
           </div>
           <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)">
               <div class="alert alert-danger" role="alert" *ngIf="codigo.errors.required">

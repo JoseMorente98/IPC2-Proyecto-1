@@ -9,6 +9,8 @@ import { AssistantComponent } from './assistant.component';
 import { MensajeAssistantComponent } from './mensaje-assistant/mensaje-assistant.component';
 import { CursosAssistantComponent } from './cursos-assistant/cursos-assistant.component';
 import { ForoAssistantComponent } from './foro-assistant/foro-assistant.component';
+import { ForoDetailAssistantComponent } from './foro-detail-assistant/foro-detail-assistant.component';
+import { ActividadAssistantComponent } from './actividad-assistant/actividad-assistant.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { ForoAssistantComponent } from './foro-assistant/foro-assistant.componen
     AssistantComponent,
     MensajeAssistantComponent,
     CursosAssistantComponent,
-    ForoAssistantComponent
+    ForoAssistantComponent,
+    ForoDetailAssistantComponent,
+    ActividadAssistantComponent
   ],
   imports: [
     CommonModule,

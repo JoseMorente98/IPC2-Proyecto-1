@@ -8,6 +8,6 @@ asignacionAuxiliar.get('/asignacion-auxiliar/curso/:id', UsuarioController.getIn
 asignacionAuxiliar.get('/asignacion-auxiliar/auxiliar/:id', UsuarioController.getInstance().getCursosByAuxiliar);
 asignacionAuxiliar.post('/asignacion-auxiliar', UsuarioController.getInstance().create);
 asignacionAuxiliar.put('/asignacion-auxiliar/:id', UsuarioController.getInstance().update);
-asignacionAuxiliar.delete('/asignacion-auxiliar/:id', UsuarioController.getInstance().delete);
+asignacionAuxiliar.put('/asignacion-auxiliar/delete/:id', UsuarioController.getInstance().deleteAsignacion);
 
 export default asignacionAuxiliar;

@@ -1,0 +1,84 @@
+<main class='main-content bgc-grey-100'>
+  <!-- ================ start banner area ================= -->	
+  <div class="jumbotron">
+    <h1 class="display-4">Comentarios</h1>
+    <div class="form-group form-inline my-2 my-lg-0">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-search"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+        </div>
+    </div>
+    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalAdd" (click)="initializeForm()">
+      <span class="icon-holder">
+        <i class="ti-plus"></i>
+      </span>  Agregar
+    </button>
+  </div>
+
+  <div class="card" *ngFor="let data of table |filter:search" style="margin: 5px;">
+    <div class="card-header">
+      {{data.nombre}} {{data.apellido}}
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{data.comentario}}</p>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalAddLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalAddLabel">Agregar Comentario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Comentario</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Comentario" formControlName="comentario" name="comentario" required>
+          </div>     
+          <div *ngIf="comentario.invalid && (comentario.dirty || comentario.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="comentario.errors.required">
+                El comentario es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="comentario.errors.maxlength">
+                La longitud maxima es de 250 caracteres
+              </div>
+          </div>  
+        </div>          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>
+
