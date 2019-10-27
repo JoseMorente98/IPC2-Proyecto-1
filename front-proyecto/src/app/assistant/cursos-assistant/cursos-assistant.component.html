@@ -39,7 +39,7 @@
                 <ul class="card-product__imgOverlay">
                   <!--<li><button><i class="ti-search"></i></button></li>
                   <li><button><i class="ti-shopping-cart"></i></button></li>-->
-                  <li (click)="saveChanges(data)"><button type="button"><i class="ti-user"></i></button></li>
+                  <li [routerLink]="['/auxiliar/evaluacion/'+data.idDetalleCurso]"><button type="button"><i class="ti-help"></i></button></li>
                   <li [routerLink]="['/auxiliar/actividad/'+data.idDetalleCurso]"><button type="button"><i class="ti-ruler-alt-2"></i></button></li>
                   <li [routerLink]="['/auxiliar/foro/'+data.idDetalleCurso]"><button type="button"><i class="ti-email"></i></button></li>
                 </ul>

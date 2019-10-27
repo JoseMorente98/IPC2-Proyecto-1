@@ -1,0 +1,223 @@
+<main class='main-content bgc-grey-100'>
+  <!-- ================ start banner area ================= -->	
+  <div class="jumbotron">
+    <h1 class="display-4">Evaluaciones</h1>
+    <div class="form-group form-inline my-2 my-lg-0">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <span class="icon-holder">
+                <i class="ti-search"></i>
+              </span>
+            </div>
+          </div>
+          <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Buscar" [(ngModel)]="search" name="search">
+        </div>
+    </div>
+    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalAdd" (click)="initializeForm()">
+      <span class="icon-holder">
+        <i class="ti-plus"></i>
+      </span>  Agregar
+    </button>
+  </div>
+
+  <section class="section-margin calc-60px">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-4 col-xl-3" *ngFor="let data of table |filter:search">
+          <div class="card text-center card-product">
+            <div class="card-product__img">
+              <img class="card-img" src="https://www.compartirpalabramaestra.org/sites/default/files/styles/articulos/public/field/image/examenes-del-icfes-un-proceso-de-investigacion-permanente.jpg?itok=jXRKWXnY" alt="">
+              <ul class="card-product__imgOverlay">
+                <!--<li><button><i class="ti-search"></i></button></li>
+                <li><button><i class="ti-shopping-cart"></i></button></li>-->
+                <li (click)="delete(data.idEvaluacion)"><button type="button"><i class="ti-trash"></i></button></li>
+                <li [routerLink]="['/auxiliar/foro/detail/'+data.idEvaluacion]"><button type="button"><i class="ti-list"></i></button></li>
+                <li><button type="button" (click)="getSingle(data.idEvaluacion)" data-toggle="modal" data-target="#exampleModalUpdate"><i class="ti-settings"></i></button></li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <!--<p>Accessories</p>-->
+              <h4 class="card-product__title"><a href="single-product.html">{{data.nombre}}</a></h4>
+              <p class="card-product__price">Punteo: {{data.punteo}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalAddLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalAddLabel">Agregar Evaluación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Titulo</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Titulo" formControlName="nombre" name="nombre" required>
+          </div>     
+          <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="nombre.errors.required">
+                El nombre es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="nombre.errors.maxlength">
+                La longitud maxima es de 255 caracteres
+              </div>
+          </div>  
+        </div> 
+        <div class="form-group">
+          <label class="text-normal text-dark">Punteo</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Punteo" formControlName="punteo" name="punteo" required>
+          </div>     
+          <div *ngIf="punteo.invalid && (punteo.dirty || punteo.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="punteo.errors.required">
+                El punteo es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="punteo.errors.maxlength">
+                La longitud maxima es de 3 caracteres
+              </div>
+          </div>  
+        </div>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- MODAL AGREGAR USUARIO -->
+<div class="modal fade" id="exampleModalUpdate" tabindex="-1" role="dialog" aria-labelledby="exampleModalAddLabel" aria-hidden="true">
+  <form class="modal-dialog" role="document" [formGroup]="formData" (ngSubmit)="saveChanges2()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalAddLabel">Agregar Evaluación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="text-normal text-dark">Titulo</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Titulo" formControlName="nombre" name="nombre" required>
+          </div>     
+          <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="nombre.errors.required">
+                El nombre es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="nombre.errors.maxlength">
+                La longitud maxima es de 255 caracteres
+              </div>
+          </div>  
+        </div> 
+        <div class="form-group">
+          <label class="text-normal text-dark">Punteo</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <input type="text" class="form-control" placeholder="Punteo" formControlName="punteo" name="punteo" required>
+          </div>     
+          <div *ngIf="punteo.invalid && (punteo.dirty || punteo.touched)">
+              <div class="alert alert-danger" role="alert" *ngIf="punteo.errors.required">
+                El punteo es requerido
+              </div>
+              <div class="alert alert-warning" role="alert" *ngIf="punteo.errors.maxlength">
+                La longitud maxima es de 3 caracteres
+              </div>
+          </div>  
+        </div>
+        <div class="form-group">
+          <label class="text-normal text-dark">Habilitar</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <select class="form-control" id="inlineFormInputGroup" placeholder="Habilitar" formControlName="habilitar" name="habilitar" >
+              <option value="0">Habilitar</option>
+              <option value="1">Deshabilitar</option>
+            </select>
+          </div>  
+        </div> 
+        <div class="form-group">
+          <label class="text-normal text-dark">Aleatorio</label>
+          <div class="input-group mb-2">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="icon-holder">
+                  <i class="ti-info-alt"></i>
+                </span>
+              </div>
+            </div>
+            <select class="form-control" id="inlineFormInputGroup" placeholder="Aleatorio" formControlName="aleatorio" name="aleatorio" >
+              <option value="0">Habilitar</option>
+              <option value="1">Deshabilitar</option>
+            </select>
+          </div>  
+        </div>     
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+          <span class="icon-holder">
+            <i class="ti-close"></i>
+          </span>  Cerrar
+        </button>
+        <button type="submit" class="btn btn-outline-primary" [disabled]="!formData.valid">
+          <span class="icon-holder">
+            <i class="ti-save-alt"></i>
+          </span>  Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>

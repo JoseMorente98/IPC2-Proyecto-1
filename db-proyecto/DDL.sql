@@ -193,10 +193,42 @@ CREATE TABLE Ticket(
     idTicket INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	asunto VARCHAR(255) NOT NULL,
 	mensaje VARCHAR(255) NOT NULL,
-    estado TINYINT NOT NULL NULL,
+    estado TINYINT NOT NULL,
 	respuesta VARCHAR(255) NULL,
     idUsuario INT NOT NULL,
 	FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREAR TABLA DE TICKET
+DROP TABLE IF EXISTS Evaluacion;
+CREATE TABLE Evaluacion(
+    idEvaluacion INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	nombre VARCHAR(255) NOT NULL,
+    habilitar TINYINT NULL,
+    aleatorio TINYINT NULL,
+    punteo INT NULL,
+    idDetalleCurso INT NOT NULL,
+	FOREIGN KEY (idDetalleCurso) REFERENCES DetalleCurso(idDetalleCurso)
+	ON UPDATE CASCADE
+    ON DELETE CASCADE
+);
+
+-- CREAR TABLA DE TICKET
+DROP TABLE IF EXISTS Pregunta;
+CREATE TABLE Pregunta(
+    idPregunta INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	tipoPregunta VARCHAR(100) NOT NULL,
+	respuesta1 VARCHAR(100) NULL,
+	respuesta2 VARCHAR(100) NULL,
+	respuesta3 VARCHAR(100) NULL,
+    verdadero VARCHAR(100) NULL,
+    falso VARCHAR(100) NULL,
+    correcta VARCHAR(100) NULL,
+	punteo DECIMAL NULL,
+    idEvaluacion INT NOT NULL,
+	FOREIGN KEY (idEvaluacion) REFERENCES Evaluacion(idEvaluacion)
 	ON UPDATE CASCADE
     ON DELETE CASCADE
 );

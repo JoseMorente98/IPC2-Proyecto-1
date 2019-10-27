@@ -7,6 +7,8 @@ import { CursosAssistantComponent } from './cursos-assistant/cursos-assistant.co
 import { ForoAssistantComponent } from './foro-assistant/foro-assistant.component';
 import { ForoDetailAssistantComponent } from './foro-detail-assistant/foro-detail-assistant.component';
 import { ActividadAssistantComponent } from './actividad-assistant/actividad-assistant.component';
+import { EvaluacionAssistantComponent } from './evaluacion-assistant/evaluacion-assistant.component';
+import { EvaluacionDetalleAssistantComponent } from './evaluacion-detalle-assistant/evaluacion-detalle-assistant.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -17,6 +19,8 @@ const routes: Routes = [
     { path: 'foro/:id', component: ForoAssistantComponent},
     { path: 'foro/detail/:id', component: ForoDetailAssistantComponent},
     { path: 'actividad/:id', component: ActividadAssistantComponent},
+    { path: 'evaluacion/:id', component: EvaluacionAssistantComponent},
+    { path: 'evaluacion/detail/:id', component: EvaluacionDetalleAssistantComponent},
     /*{ path: 'producto', component: ProductoAdminComponent, canActivate: [AuthGuard] },
     { path: 'proveedor', component: ProveedorAdminComponent, canActivate: [AuthGuard] },
     { path: 'usuario', component: UsuarioAdminComponent, canActivate: [AuthGuard] },

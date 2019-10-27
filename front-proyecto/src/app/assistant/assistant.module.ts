@@ -11,6 +11,8 @@ import { CursosAssistantComponent } from './cursos-assistant/cursos-assistant.co
 import { ForoAssistantComponent } from './foro-assistant/foro-assistant.component';
 import { ForoDetailAssistantComponent } from './foro-detail-assistant/foro-detail-assistant.component';
 import { ActividadAssistantComponent } from './actividad-assistant/actividad-assistant.component';
+import { EvaluacionAssistantComponent } from './evaluacion-assistant/evaluacion-assistant.component';
+import { EvaluacionDetalleAssistantComponent } from './evaluacion-detalle-assistant/evaluacion-detalle-assistant.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { ActividadAssistantComponent } from './actividad-assistant/actividad-ass
     CursosAssistantComponent,
     ForoAssistantComponent,
     ForoDetailAssistantComponent,
-    ActividadAssistantComponent
+    ActividadAssistantComponent,
+    EvaluacionAssistantComponent,
+    EvaluacionDetalleAssistantComponent
   ],
   imports: [
     CommonModule,
